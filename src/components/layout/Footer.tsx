@@ -1,4 +1,4 @@
-
+import { Link } from 'react-router-dom';
 import { MapPin, Phone, Mail, ArrowRight } from 'lucide-react';
 import { Button } from '../ui/Button';
 
@@ -17,26 +17,16 @@ export function Footer() {
             <p className="text-gray-400 mb-6 leading-relaxed">
               Engineered for living. Designed for you. We build premium, architecturally significant homes for the modern family.
             </p>
-            <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-brand-secondary hover:text-gray-900 transition-colors font-medium text-sm">
-                IG
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-brand-secondary hover:text-gray-900 transition-colors font-medium text-sm">
-                FB
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-brand-secondary hover:text-gray-900 transition-colors font-medium text-sm">
-                X
-              </a>
-            </div>
+
           </div>
           
           <div>
             <h4 className="text-white font-serif text-xl mb-6">Quick Links</h4>
             <ul className="flex flex-col gap-3">
-              <li><a href="#properties" className="hover:text-brand-secondary transition-colors">The Collections</a></li>
-              <li><a href="#styles" className="hover:text-brand-secondary transition-colors">Architecture Lab</a></li>
-              <li><a href="#about" className="hover:text-brand-secondary transition-colors">Why Estate.Lab</a></li>
-              <li><a href="#" className="hover:text-brand-secondary transition-colors">Legal & Privacy</a></li>
+              <li><a href="/#properties" className="hover:text-brand-secondary transition-colors">Properties</a></li>
+              <li><a href="/#styles" className="hover:text-brand-secondary transition-colors">Styles</a></li>
+              <li><a href="/#about" className="hover:text-brand-secondary transition-colors">About Us</a></li>
+              <li><Link to="/legal" className="hover:text-brand-secondary transition-colors">Legal & Privacy</Link></li>
             </ul>
           </div>
           

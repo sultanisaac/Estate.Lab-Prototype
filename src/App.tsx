@@ -3,6 +3,8 @@ import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { Home } from './pages/Home';
 import { Booking } from './pages/Booking';
+import { Legal } from './pages/Legal';
+
 
 function App() {
   return (
@@ -13,6 +15,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/booking" element={<Booking />} />
+            <Route path="/legal" element={<Legal />} />
           </Routes>
         </main>
         <Footer />
