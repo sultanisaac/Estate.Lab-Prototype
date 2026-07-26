@@ -29,23 +29,105 @@ export default async function handler(req: any, res: any) {
       from: `"Osman (Estate.Lab)" <${process.env.EMAIL_USER}>`, // The authenticated account
       replyTo: "osman@asimetrilab.com", // Replies go to Osman
       to: email, // Sending confirmation to the user who filled the form
-      subject: `Estate.Lab - Booking Confirmation for ${firstName}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1F2937;">
-          <h2 style="color: #0F4C5C;">Begin Your Journey Home</h2>
-          <p>Hi ${firstName} ${lastName},</p>
-          <p>Thank you for booking a viewing with Estate.Lab. Here are your booking details:</p>
-          <ul style="list-style-type: none; padding: 0;">
-            <li><strong>Date:</strong> ${date}</li>
-            <li><strong>Time:</strong> ${time}</li>
-            <li><strong>Collection:</strong> ${propertyType || 'General Consultation'}</li>
-            <li><strong>WhatsApp:</strong> ${whatsapp}</li>
-          </ul>
-          ${notes ? `<p><strong>Additional Notes:</strong> ${notes}</p>` : ''}
-          <p style="margin-top: 30px;">We will contact you shortly to confirm your viewing schedule.</p>
-          <p>Best regards,<br/>Osman<br/><strong>Estate.Lab Property Advisor</strong></p>
-        </div>
-      `,
+      subject: \`Estate.Lab | Your Private Viewing Request is Received\`,
+      html: \`<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Your Viewing Request with Estate.Lab</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+        body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; background-color: #FAF8F4; }
+        :root { color-scheme: light dark; supported-color-schemes: light dark; }
+        .hover-btn:hover { opacity: 0.9; }
+        @media screen and (max-width: 600px) {
+            .mobile-padding { padding: 30px 20px !important; }
+            .mobile-header { font-size: 24px !important; }
+            .mobile-text { font-size: 15px !important; }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #FAF8F4; font-family: 'Inter', Arial, Helvetica, sans-serif;">
+    <div style="display: none; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #FAF8F4; opacity: 0;">
+        We have received your interest and are currently reviewing your requested schedule for a private viewing.
+    </div>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #FAF8F4; table-layout: fixed;">
+        <tr>
+            <td align="center" style="padding: 40px 10px;">
+                <!--[if (gte mso 9)|(IE)]>
+                <table align="center" border="0" cellspacing="0" cellpadding="0" width="600"><tr><td align="center" valign="top" width="600">
+                <![endif]-->
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #FFFFFF; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <tr>
+                        <td align="center" class="mobile-padding" style="padding: 40px; background-color: #0F4C5C;">
+                            <h1 style="margin: 0; font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #D4B483; letter-spacing: 2px; text-transform: uppercase;">
+                                Estate.Lab
+                            </h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="mobile-padding" style="padding: 50px 40px; color: #1F2937; font-family: 'Inter', Arial, Helvetica, sans-serif; font-size: 16px; line-height: 1.6;">
+                            <h2 class="mobile-header" style="margin-top: 0; margin-bottom: 24px; font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-size: 24px; font-weight: 700; color: #0F4C5C;">
+                                Viewing Request Received
+                            </h2>
+                            <p class="mobile-text" style="margin: 0 0 20px 0;">Dear \${firstName},</p>
+                            <p class="mobile-text" style="margin: 0 0 20px 0;">Thank you for requesting a private viewing with Estate.Lab.</p>
+                            <p class="mobile-text" style="margin: 0 0 20px 0;">
+                                We have received your interest in the <strong>\${propertyType || 'General Consultation'}</strong> and are currently reviewing your requested schedule for <strong>\${date}</strong> at <strong>\${time}</strong>.
+                            </p>
+                            <p class="mobile-text" style="margin: 0 0 30px 0;">
+                                At Estate.Lab, we believe in crafting spaces that transcend ordinary living, and we are thrilled to guide you on your journey home. I will personally review your preferences and reach out to you shortly via WhatsApp at <strong>\${whatsapp}</strong> to finalize the details of our consultation.
+                            </p>
+                            <table border="0" cellpadding="0" cellspacing="0" style="margin: 0 0 30px 0;">
+                                <tr>
+                                    <td align="center" bgcolor="#0F4C5C" style="border-radius: 4px;">
+                                        <a href="https://estatelab-prototype.vercel.app/" target="_blank" class="hover-btn" style="display: inline-block; padding: 14px 28px; font-family: 'Inter', Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 700; color: #FFFFFF; text-decoration: none; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px;">
+                                            Explore Estate.Lab
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p class="mobile-text" style="margin: 0 0 24px 0;">If you have any immediate questions or need to reschedule before we connect, please feel free to reply directly to this email.</p>
+                            <p class="mobile-text" style="margin: 0 0 5px 0;">Warm regards,</p>
+                            <p style="margin: 0; font-family: 'Inter', Arial, Helvetica, sans-serif;">
+                                <strong style="font-size: 16px; color: #1F2937;">Osman</strong><br>
+                                <span style="font-size: 14px; color: #0F4C5C;">Property Advisor</span><br>
+                                <span style="font-size: 14px; color: #0F4C5C;">Estate.Lab</span>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="padding: 0; margin: 0;">
+                            <hr style="border: none; border-top: 1px solid #E8DCCB; margin: 0; width: 100%;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" class="mobile-padding" style="padding: 30px 40px; background-color: #FAF8F4;">
+                            <p style="margin: 0; font-family: 'Inter', Arial, Helvetica, sans-serif; font-size: 12px; line-height: 1.6; color: #1F2937;">
+                                &copy; 2026 <a href="https://estatelab-prototype.vercel.app/" style="color: #0F4C5C; text-decoration: none; font-weight: bold;">Estate.Lab</a>. All rights reserved.<br>
+                                Crafting spaces that transcend ordinary living.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                <!--[if (gte mso 9)|(IE)]>
+                </td></tr></table>
+                <![endif]-->
+            </td>
+        </tr>
+    </table>
+</body>
+</html>\`,
     };
 
     // Send confirmation to the client
