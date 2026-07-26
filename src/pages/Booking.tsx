@@ -13,7 +13,7 @@ export function Booking() {
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col lg:flex-row max-w-6xl mx-auto">
           <div className="lg:w-5/12 relative h-64 lg:h-auto">
             <img 
-              src="https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?auto=format&fit=crop&q=80&w=1000" 
+              src="/booking-cover.png" 
               alt="Consultation" 
               className="w-full h-full object-cover"
             />
