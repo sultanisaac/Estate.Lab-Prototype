@@ -5,19 +5,16 @@ export default async function handler(req: any, res: any) {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { firstName, lastName, email, whatsapp, date, time, propertyType, notes } = req.body;
+  const { email } = req.body;
 
-  // We expect EMAIL_USER and EMAIL_PASS to be set in the environment (.env.local for dev, Vercel for prod)
-  // Since we don't know the exact host for asimetrilab.com, we will assume standard SMTP.
-  // If it's Google Workspace, Host is smtp.gmail.com. If Hostinger, smtp.hostinger.com.
-  // We will configure a generic transporter that should work for most cPanel/Titan/Hostinger setups.
-  // If you know your specific SMTP host (e.g. smtp.gmail.com or mail.asimetrilab.com), please update `host`.
-  
-  // NOTE: A common default host for custom domains is mail.domain.com or smtp.domain.com
+  if (!email) {
+    return res.status(400).json({ message: 'Email is required' });
+  }
+
   const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.hostinger.com', // Change this to your provider's SMTP server if needed
+    host: process.env.SMTP_HOST || 'smtp.hostinger.com',
     port: 465,
-    secure: true, // true for 465, false for other ports
+    secure: true,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
@@ -25,11 +22,12 @@ export default async function handler(req: any, res: any) {
   });
 
   try {
-    const mailOptions = {
-      from: `"Osman (Estate.Lab)" <${process.env.EMAIL_USER}>`, // The authenticated account
-      replyTo: "osman@asimetrilab.com", // Replies go to Osman
-      to: email, // Sending confirmation to the user who filled the form
-      subject: \`Estate.Lab | Your Private Viewing Request is Received\`,
+    // 1. Send Welcome Email to Subscriber
+    const subscriberMailOptions = {
+      from: `"Estate.Lab" <${process.env.EMAIL_USER}>`,
+      replyTo: "osman@asimetrilab.com",
+      to: email,
+      subject: \`Welcome to the Estate.Lab Newsletter\`,
       html: \`<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -37,7 +35,7 @@ export default async function handler(req: any, res: any) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="x-apple-disable-message-reformatting">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Your Viewing Request with Estate.Lab</title>
+    <title>Welcome to Estate.Lab</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,7 +57,7 @@ export default async function handler(req: any, res: any) {
 </head>
 <body style="margin: 0; padding: 0; background-color: #FAF8F4; font-family: 'Inter', Arial, Helvetica, sans-serif;">
     <div style="display: none; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #FAF8F4; opacity: 0;">
-        We have received your interest and are currently reviewing your requested schedule for a private viewing.
+        Thank you for subscribing to our newsletter! You are now on the exclusive list.
     </div>
     <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #FAF8F4; table-layout: fixed;">
         <tr>
@@ -78,31 +76,16 @@ export default async function handler(req: any, res: any) {
                     <tr>
                         <td class="mobile-padding" style="padding: 50px 40px; color: #1F2937; font-family: 'Inter', Arial, Helvetica, sans-serif; font-size: 16px; line-height: 1.6;">
                             <h2 class="mobile-header" style="margin-top: 0; margin-bottom: 24px; font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-size: 24px; font-weight: 700; color: #0F4C5C;">
-                                Viewing Request Received
+                                Welcome to Estate.Lab
                             </h2>
-                            <p class="mobile-text" style="margin: 0 0 20px 0;">Dear \${firstName},</p>
-                            <p class="mobile-text" style="margin: 0 0 20px 0;">Thank you for requesting a private viewing with Estate.Lab.</p>
+                            <p class="mobile-text" style="margin: 0 0 20px 0;">Thank you for subscribing to our newsletter!</p>
                             <p class="mobile-text" style="margin: 0 0 20px 0;">
-                                We have received your interest in the <strong>\${propertyType || 'General Consultation'}</strong> and are currently reviewing your requested schedule for <strong>\${date}</strong> at <strong>\${time}</strong>.
+                                You are now on the exclusive list to receive early updates on new property launches, architectural insights, and special offers.
                             </p>
-                            <p class="mobile-text" style="margin: 0 0 30px 0;">
-                                At Estate.Lab, we believe in crafting spaces that transcend ordinary living, and we are thrilled to guide you on your journey home. I will personally review your preferences and reach out to you shortly via WhatsApp at <strong>\${whatsapp}</strong> to finalize the details of our consultation.
-                            </p>
-                            <table border="0" cellpadding="0" cellspacing="0" style="margin: 0 0 30px 0;">
-                                <tr>
-                                    <td align="center" bgcolor="#0F4C5C" style="border-radius: 4px;">
-                                        <a href="https://estatelab-prototype.vercel.app/" target="_blank" class="hover-btn" style="display: inline-block; padding: 14px 28px; font-family: 'Inter', Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 700; color: #FFFFFF; text-decoration: none; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px;">
-                                            Explore Estate.Lab
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                            <p class="mobile-text" style="margin: 0 0 24px 0;">If you have any immediate questions or need to reschedule before we connect, please feel free to reply directly to this email.</p>
-                            <p class="mobile-text" style="margin: 0 0 5px 0;">Warm regards,</p>
+                            <p class="mobile-text" style="margin: 0 0 30px 0;">We look forward to sharing our journey with you.</p>
+                            <p class="mobile-text" style="margin: 0 0 5px 0;">Best regards,</p>
                             <p style="margin: 0; font-family: 'Inter', Arial, Helvetica, sans-serif;">
-                                <strong style="font-size: 16px; color: #1F2937;">Osman</strong><br>
-                                <span style="font-size: 14px; color: #0F4C5C;">Property Advisor</span><br>
-                                <span style="font-size: 14px; color: #0F4C5C;">Estate.Lab</span>
+                                <strong style="font-size: 16px; color: #1F2937;">The Estate.Lab Team</strong>
                             </p>
                         </td>
                     </tr>
@@ -114,8 +97,9 @@ export default async function handler(req: any, res: any) {
                     <tr>
                         <td align="center" class="mobile-padding" style="padding: 30px 40px; background-color: #FAF8F4;">
                             <p style="margin: 0; font-family: 'Inter', Arial, Helvetica, sans-serif; font-size: 12px; line-height: 1.6; color: #1F2937;">
-                                &copy; 2026 <a href="https://estatelab-prototype.vercel.app/" style="color: #0F4C5C; text-decoration: none; font-weight: bold;">Estate.Lab</a>. All rights reserved.<br>
-                                Crafting spaces that transcend ordinary living.
+                                &copy; \${new Date().getFullYear()} <a href="https://estatelab-prototype.vercel.app/" style="color: #0F4C5C; text-decoration: none; font-weight: bold;">Estate.Lab</a>. All rights reserved.<br>
+                                Crafting spaces that transcend ordinary living.<br><br>
+                                <a href="https://estatelab-prototype.vercel.app/" style="color: #6B7280; text-decoration: underline;">Unsubscribe from this list</a>
                             </p>
                         </td>
                     </tr>
@@ -130,34 +114,28 @@ export default async function handler(req: any, res: any) {
 </html>\`,
     };
 
-    // Send confirmation to the client
-    await transporter.sendMail(mailOptions);
+    await transporter.sendMail(subscriberMailOptions);
 
-    // Send notification to Osman
+    // 2. Send Notification to Admin (Osman)
     const adminMailOptions = {
       from: `"Estate.Lab System" <${process.env.EMAIL_USER}>`,
-      replyTo: email, // If Osman hits reply, it goes to the client
-      to: "osman@asimetrilab.com", // Notify Osman
-      subject: `New Viewing Request: ${firstName} ${lastName}`,
+      replyTo: email,
+      to: "osman@asimetrilab.com",
+      subject: `New Newsletter Subscriber!`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1F2937;">
-          <h2 style="color: #0F4C5C;">New Booking Received</h2>
-          <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+          <h2 style="color: #0F4C5C;">New Subscriber Alert</h2>
+          <p>A new user has subscribed to the newsletter!</p>
           <p><strong>Email:</strong> ${email}</p>
-          <p><strong>WhatsApp:</strong> ${whatsapp}</p>
-          <p><strong>Date:</strong> ${date}</p>
-          <p><strong>Time:</strong> ${time}</p>
-          <p><strong>Property Type:</strong> ${propertyType}</p>
-          <p><strong>Notes:</strong> ${notes || 'None'}</p>
         </div>
       `,
     };
     
     await transporter.sendMail(adminMailOptions);
 
-    res.status(200).json({ message: 'Booking successful' });
+    res.status(200).json({ message: 'Subscription successful' });
   } catch (error) {
-    console.error('Error sending email:', error);
-    res.status(500).json({ message: 'Error sending email', error });
+    console.error('Error sending subscription email:', error);
+    res.status(500).json({ message: 'Error subscribing', error });
   }
 }
