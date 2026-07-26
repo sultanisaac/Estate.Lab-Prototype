@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { PropertyType } from '../../data/properties';
@@ -21,6 +21,19 @@ const imageLabels = [
 
 export function ImageGallery({ property, isOpen, onClose }: ImageGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight') setCurrentIndex((prev) => (prev + 1) % 7);
+      if (e.key === 'ArrowLeft') setCurrentIndex((prev) => (prev - 1 + 7) % 7);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -76,12 +89,12 @@ export function ImageGallery({ property, isOpen, onClose }: ImageGalleryProps) {
             <ChevronRight className="w-6 h-6" />
           </button>
 
-          <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-10 overflow-x-auto px-4 pb-2">
+          <div className="absolute bottom-4 left-0 w-full flex justify-center gap-1 md:gap-2 z-10 px-2 md:px-4 pb-2">
             {imageLabels.map((item, idx) => (
               <button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
-                className={`flex-shrink-0 w-16 h-12 md:w-24 md:h-16 rounded-md overflow-hidden border-2 transition-all ${idx === currentIndex ? 'border-brand-secondary' : 'border-transparent opacity-50 hover:opacity-100'}`}
+                className={`flex-1 max-w-[64px] md:max-w-[96px] aspect-video rounded-sm md:rounded-md overflow-hidden border-2 transition-all ${idx === currentIndex ? 'border-brand-secondary' : 'border-transparent opacity-50 hover:opacity-100'}`}
               >
                 <img 
                   src={property.images[item.key as keyof typeof property.images]} 
