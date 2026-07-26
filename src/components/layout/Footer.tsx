@@ -1,8 +1,42 @@
 import { Link } from 'react-router-dom';
-import { MapPin, Phone, Mail, ArrowRight } from 'lucide-react';
+import { MapPin, Phone, Mail, ArrowRight, CheckCircle2, Loader2 } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { useState } from 'react';
+
 
 export function Footer() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    
+    setStatus('loading');
+    
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) throw new Error('Failed to subscribe');
+
+      setStatus('success');
+      setTimeout(() => {
+        setStatus('idle');
+        setEmail('');
+      }, 5000);
+    } catch (error) {
+      console.error(error);
+      setStatus('error');
+      alert('Failed to subscribe. Please try again later.');
+    }
+  };
+
   return (
     <footer className="bg-gray-900 text-gray-300 pt-20 pb-10">
       <div className="container mx-auto px-4 md:px-8">
@@ -51,16 +85,33 @@ export function Footer() {
           <div>
             <h4 className="text-white font-serif text-xl mb-6">Newsletter</h4>
             <p className="text-gray-400 mb-4">Subscribe to receive updates on new property launches and exclusive offers.</p>
-            <form className="flex flex-col gap-2" onSubmit={(e) => e.preventDefault()}>
-              <input 
-                type="email" 
-                placeholder="Your email address" 
-                className="bg-gray-800 border border-gray-700 text-white px-4 py-3 rounded-md focus:outline-none focus:border-brand-secondary transition-colors w-full"
-              />
-              <Button variant="secondary" className="w-full">
-                Subscribe <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </form>
+            {status === 'success' ? (
+              <div className="bg-brand-secondary/20 border border-brand-secondary/50 rounded-md p-4 flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-brand-secondary shrink-0 mt-0.5" />
+                <p className="text-brand-secondary text-sm">Thank you for subscribing! We've sent a welcome email to your inbox.</p>
+              </div>
+            ) : (
+              <form className="flex flex-col gap-2" onSubmit={handleSubscribe}>
+                <input 
+                  type="email" 
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={status === 'loading'}
+                  placeholder="Your email address" 
+                  className="bg-gray-800 border border-gray-700 text-white px-4 py-3 rounded-md focus:outline-none focus:border-brand-secondary transition-colors w-full disabled:opacity-50"
+                />
+                <Button variant="secondary" className="w-full" disabled={status === 'loading'}>
+                  {status === 'loading' ? (
+                    <span className="flex items-center justify-center">
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Subscribing...
+                    </span>
+                  ) : (
+                    <>Subscribe <ArrowRight className="w-4 h-4 ml-2" /></>
+                  )}
+                </Button>
+              </form>
+            )}
           </div>
         </div>
         
