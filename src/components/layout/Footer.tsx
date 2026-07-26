@@ -9,9 +9,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div>
             <a href="#" className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 bg-brand-secondary rounded-sm flex items-center justify-center">
-                <span className="text-gray-900 font-serif font-bold text-xl leading-none">E</span>
-              </div>
+              <img src="/logo.png" alt="Estate.Lab Logo" className="w-10 h-10 object-contain rounded-md" />
               <span className="font-serif font-bold text-2xl tracking-tight text-white">
                 Estate.Lab
               </span>

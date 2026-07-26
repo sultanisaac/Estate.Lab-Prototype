@@ -25,9 +25,7 @@ export function Navbar() {
     )}>
       <div className="container mx-auto px-4 md:px-8 flex justify-between items-center">
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-brand-primary rounded-sm flex items-center justify-center">
-            <span className="text-white font-serif font-bold text-xl leading-none">E</span>
-          </div>
+          <img src="/logo.png" alt="Estate.Lab Logo" className="w-10 h-10 object-contain rounded-md shadow-sm" />
           <span className={clsx(
             "font-serif font-bold text-2xl tracking-tight transition-colors",
             (isScrolled || !isHomePage) ? "text-brand-primary" : "text-white"
