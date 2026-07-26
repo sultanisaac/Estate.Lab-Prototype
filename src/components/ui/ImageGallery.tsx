@@ -89,12 +89,12 @@ export function ImageGallery({ property, isOpen, onClose }: ImageGalleryProps) {
             <ChevronRight className="w-6 h-6" />
           </button>
 
-          <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-10 overflow-x-auto px-4 pb-2">
+          <div className="absolute bottom-4 left-0 w-full flex justify-center gap-1 md:gap-2 z-10 px-2 md:px-4 pb-2">
             {imageLabels.map((item, idx) => (
               <button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
-                className={`flex-shrink-0 w-16 h-12 md:w-24 md:h-16 rounded-md overflow-hidden border-2 transition-all ${idx === currentIndex ? 'border-brand-secondary' : 'border-transparent opacity-50 hover:opacity-100'}`}
+                className={`flex-1 max-w-[64px] md:max-w-[96px] aspect-video rounded-sm md:rounded-md overflow-hidden border-2 transition-all ${idx === currentIndex ? 'border-brand-secondary' : 'border-transparent opacity-50 hover:opacity-100'}`}
               >
                 <img 
                   src={property.images[item.key as keyof typeof property.images]} 
