@@ -1,7 +1,5 @@
 # Estate.Lab - Premium Real Estate Landing Page
 
-![Estate.Lab](https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=2000)
-
 **Estate.Lab** is a luxurious, high-converting real estate prototype built to showcase architecturally significant homes. Designed with a premium brand identity in mind, this landing page serves as a sophisticated digital catalog to attract potential home buyers and investors. 
 
 The platform utilizes a "Real Estate Funnel" approach, guiding visitors from an immersive hero section down to exploring property collections, learning about architectural styles, building trust, and finally, lead capture.
