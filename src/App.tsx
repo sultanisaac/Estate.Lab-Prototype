@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Shield, Award, Users, PenTool, CheckCircle, Quote, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Shield, Award, Users, PenTool, CheckCircle, Quote, ArrowRight } from 'lucide-react';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { Button } from './components/ui/Button';

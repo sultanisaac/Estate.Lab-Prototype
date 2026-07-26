@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Maximize, Bed, Bath, ArrowRight } from 'lucide-react';
 import type { PropertyType } from '../../data/properties';
