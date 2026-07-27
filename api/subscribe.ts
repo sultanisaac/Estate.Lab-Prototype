@@ -27,8 +27,8 @@ export default async function handler(req: any, res: any) {
       from: `"Estate.Lab" <${process.env.EMAIL_USER}>`,
       replyTo: "osman@asimetrilab.com",
       to: email,
-      subject: \`Welcome to the Estate.Lab Newsletter\`,
-      html: \`<!DOCTYPE html>
+      subject: `Welcome to the Estate.Lab Newsletter`,
+      html: `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
     <meta charset="utf-8">
@@ -97,7 +97,7 @@ export default async function handler(req: any, res: any) {
                     <tr>
                         <td align="center" class="mobile-padding" style="padding: 30px 40px; background-color: #FAF8F4;">
                             <p style="margin: 0; font-family: 'Inter', Arial, Helvetica, sans-serif; font-size: 12px; line-height: 1.6; color: #1F2937;">
-                                &copy; \${new Date().getFullYear()} <a href="https://estatelab-prototype.vercel.app/" style="color: #0F4C5C; text-decoration: none; font-weight: bold;">Estate.Lab</a>. All rights reserved.<br>
+                                &copy; ${new Date().getFullYear()} <a href="https://estatelab-prototype.vercel.app/" style="color: #0F4C5C; text-decoration: none; font-weight: bold;">Estate.Lab</a>. All rights reserved.<br>
                                 Crafting spaces that transcend ordinary living.<br><br>
                                 <a href="https://estatelab-prototype.vercel.app/" style="color: #6B7280; text-decoration: underline;">Unsubscribe from this list</a>
                             </p>
@@ -111,7 +111,7 @@ export default async function handler(req: any, res: any) {
         </tr>
     </table>
 </body>
-</html>\`,
+</html>`,
     };
 
     await transporter.sendMail(subscriberMailOptions);

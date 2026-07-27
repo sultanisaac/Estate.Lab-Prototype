@@ -29,8 +29,8 @@ export default async function handler(req: any, res: any) {
       from: `"Osman (Estate.Lab)" <${process.env.EMAIL_USER}>`, // The authenticated account
       replyTo: "osman@asimetrilab.com", // Replies go to Osman
       to: email, // Sending confirmation to the user who filled the form
-      subject: \`Estate.Lab | Your Private Viewing Request is Received\`,
-      html: \`<!DOCTYPE html>
+      subject: `Estate.Lab | Your Private Viewing Request is Received`,
+      html: `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
     <meta charset="utf-8">
@@ -80,13 +80,13 @@ export default async function handler(req: any, res: any) {
                             <h2 class="mobile-header" style="margin-top: 0; margin-bottom: 24px; font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-size: 24px; font-weight: 700; color: #0F4C5C;">
                                 Viewing Request Received
                             </h2>
-                            <p class="mobile-text" style="margin: 0 0 20px 0;">Dear \${firstName},</p>
+                            <p class="mobile-text" style="margin: 0 0 20px 0;">Dear ${firstName},</p>
                             <p class="mobile-text" style="margin: 0 0 20px 0;">Thank you for requesting a private viewing with Estate.Lab.</p>
                             <p class="mobile-text" style="margin: 0 0 20px 0;">
-                                We have received your interest in the <strong>\${propertyType || 'General Consultation'}</strong> and are currently reviewing your requested schedule for <strong>\${date}</strong> at <strong>\${time}</strong>.
+                                We have received your interest in the <strong>${propertyType || 'General Consultation'}</strong> and are currently reviewing your requested schedule for <strong>${date}</strong> at <strong>${time}</strong>.
                             </p>
                             <p class="mobile-text" style="margin: 0 0 30px 0;">
-                                At Estate.Lab, we believe in crafting spaces that transcend ordinary living, and we are thrilled to guide you on your journey home. I will personally review your preferences and reach out to you shortly via WhatsApp at <strong>\${whatsapp}</strong> to finalize the details of our consultation.
+                                At Estate.Lab, we believe in crafting spaces that transcend ordinary living, and we are thrilled to guide you on your journey home. I will personally review your preferences and reach out to you shortly via WhatsApp at <strong>${whatsapp}</strong> to finalize the details of our consultation.
                             </p>
                             <table border="0" cellpadding="0" cellspacing="0" style="margin: 0 0 30px 0;">
                                 <tr>
@@ -127,7 +127,7 @@ export default async function handler(req: any, res: any) {
         </tr>
     </table>
 </body>
-</html>\`,
+</html>`,
     };
 
     // Send confirmation to the client
