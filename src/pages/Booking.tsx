@@ -40,7 +40,9 @@ export function Booking() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to send booking');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('[Booking API Error]', response.status, errorData);
+        throw new Error(errorData.error || errorData.message || 'Failed to send booking');
       }
 
       setIsSuccess(true);
@@ -54,7 +56,7 @@ export function Booking() {
         });
       }, 3000);
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error('[Booking API Error]', error);
       alert('There was an error submitting your booking. Please try again.');
     } finally {
       setIsSubmitting(false);
