@@ -134,8 +134,8 @@ export default async function handler(req: any, res: any) {
     await transporter.sendMail(adminMailOptions);
 
     res.status(200).json({ message: 'Subscription successful' });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error sending subscription email:', error);
-    res.status(500).json({ message: 'Error subscribing', error });
+    res.status(500).json({ message: 'Error subscribing', error: error?.message || String(error) });
   }
 }
