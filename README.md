@@ -9,15 +9,18 @@ The platform utilizes a "Real Estate Funnel" approach, guiding visitors from an 
 - **The Curated Collections:** Properties categorized by size and target demographic (Starter, Family, Signature collections).
 - **Interactive 7-Image Gallery:** Each property features a seamless gallery modal showcasing the Exterior, Living Room, Kitchen, Master Bedroom, Bathroom, Multifunction Room, and Outdoor Space.
 - **The Architecture Lab:** An interactive section that dynamically shifts the page background color when hovering over different architectural styles (Minimalis Modern, Tropis Modern, Skandinavia, Industrial).
-- **Responsive & Animated UI:** Built with a mobile-first approach, featuring smooth micro-animations, fade-ins, and hover lifts powered by Framer Motion.
-- **Lead Generation:** Integrated Call-to-Action (CTA) sections with tailored forms for easy viewing requests and consultations.
+- **Integrated Booking & Newsletter Systems:** Full booking flow and lead capture with serverless backend processing.
+- **Automated Email Notifications:** Professional HTML email confirmations for both clients and advisors via Nodemailer and Gmail SMTP.
+- **Responsive & Animated UI:** Built with a mobile-first approach, featuring smooth micro-animations, a premium video hero background, and hover lifts powered by Framer Motion.
 
 ## 🛠 Tech Stack
 
-- **Framework:** React 18
+- **Framework:** React 18 & React Router
 - **Build Tool:** Vite
 - **Styling:** Tailwind CSS (Premium customized theme)
 - **Animations:** Framer Motion
+- **Backend & API:** Vercel Serverless Functions
+- **Email Service:** Nodemailer
 - **Icons:** Lucide React
 - **Language:** TypeScript
 
@@ -30,19 +33,26 @@ The platform utilizes a "Real Estate Funnel" approach, guiding visitors from an 
 
 ## 🚀 Getting Started
 
-To run this project locally:
+To run this project locally, you will need to set up your environment variables for the backend services.
 
 1. **Install dependencies:**
    ```bash
    npm install
    ```
 
-2. **Start the development server:**
+2. **Set up Environment Variables:**
+   Create a `.env` file in the root directory and add the following variables:
+   ```env
+   GMAIL_USER=your_email@gmail.com
+   GMAIL_PASS=your_gmail_app_password
+   ```
+
+3. **Start the development server:**
    ```bash
    npm run dev
    ```
 
-3. **Build for production:**
+4. **Build for production:**
    ```bash
    npm run build
    ```
