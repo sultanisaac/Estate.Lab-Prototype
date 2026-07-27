@@ -7,6 +7,40 @@ export default async function handler(req: any, res: any) {
 
   const { firstName, lastName, email, whatsapp, date, time, propertyType, notes } = req.body;
 
+  // Format Property Type
+  const propertyTypeMap: Record<string, string> = {
+    'starter': 'Starter Collection (Type 45 & 60)',
+    'family': 'Family Collection (Type 70 & 80)',
+    'signature': 'Signature Collection (Type 90 & 120)',
+    'undecided': 'General Consultation'
+  };
+  const displayPropertyType = propertyTypeMap[propertyType] || propertyType || 'General Consultation';
+
+  // Format Date (e.g., 2026-07-25 to 25th July 2026)
+  let formattedDate = date;
+  if (date) {
+    const dateObj = new Date(date);
+    const day = dateObj.getDate();
+    const getOrdinal = (n: number) => {
+      const s = ["th", "st", "nd", "rd"];
+      const v = n % 100;
+      return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    };
+    const month = dateObj.toLocaleString('en-US', { month: 'long' });
+    const year = dateObj.getFullYear();
+    formattedDate = `${getOrdinal(day)} ${month} ${year}`;
+  }
+
+  // Format Time (e.g., 18:22 to 06:22 PM)
+  let formattedTime = time;
+  if (time && time.includes(':')) {
+    const [hours, minutes] = time.split(':');
+    const h = parseInt(hours, 10);
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const h12 = h % 12 || 12;
+    formattedTime = `${h12.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+  }
+
   // We expect EMAIL_USER and EMAIL_PASS to be set in the environment (.env.local for dev, Vercel for prod)
   // Since we don't know the exact host for asimetrilab.com, we will assume standard SMTP.
   // If it's Google Workspace, Host is smtp.gmail.com. If Hostinger, smtp.hostinger.com.
@@ -83,7 +117,7 @@ export default async function handler(req: any, res: any) {
                             <p class="mobile-text" style="margin: 0 0 20px 0;">Dear ${firstName},</p>
                             <p class="mobile-text" style="margin: 0 0 20px 0;">Thank you for requesting a private viewing with Estate.Lab.</p>
                             <p class="mobile-text" style="margin: 0 0 20px 0;">
-                                We have received your interest in the <strong>${propertyType || 'General Consultation'}</strong> and are currently reviewing your requested schedule for <strong>${date}</strong> at <strong>${time}</strong>.
+                                We have received your interest in the <strong>${displayPropertyType}</strong> and are currently reviewing your requested schedule for <strong>${formattedDate}</strong> at <strong>${formattedTime}</strong>.
                             </p>
                             <p class="mobile-text" style="margin: 0 0 30px 0;">
                                 At Estate.Lab, we believe in crafting spaces that transcend ordinary living, and we are thrilled to guide you on your journey home. I will personally review your preferences and reach out to you shortly via WhatsApp at <strong>${whatsapp}</strong> to finalize the details of our consultation.
@@ -145,9 +179,9 @@ export default async function handler(req: any, res: any) {
           <p><strong>Name:</strong> ${firstName} ${lastName}</p>
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>WhatsApp:</strong> ${whatsapp}</p>
-          <p><strong>Date:</strong> ${date}</p>
-          <p><strong>Time:</strong> ${time}</p>
-          <p><strong>Property Type:</strong> ${propertyType}</p>
+          <p><strong>Date:</strong> ${formattedDate}</p>
+          <p><strong>Time:</strong> ${formattedTime}</p>
+          <p><strong>Property Type:</strong> ${displayPropertyType}</p>
           <p><strong>Notes:</strong> ${notes || 'None'}</p>
         </div>
       `,
