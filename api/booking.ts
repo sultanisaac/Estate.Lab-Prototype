@@ -15,7 +15,7 @@ export default async function handler(req: any, res: any) {
   
   // NOTE: A common default host for custom domains is mail.domain.com or smtp.domain.com
   const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.hostinger.com', // Change this to your provider's SMTP server if needed
+    host: process.env.SMTP_HOST || 'smtp.gmail.com', // Defaulting to Gmail as specified in environment
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
