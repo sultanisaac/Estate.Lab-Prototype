@@ -1,8 +1,11 @@
 import { ArrowRight, CheckCircle2, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function Booking() {
+  const navigate = useNavigate();
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -47,14 +50,10 @@ export function Booking() {
 
       setIsSuccess(true);
       
-      // Reset form after 3 seconds
+      // Redirect to home page after 2 seconds
       setTimeout(() => {
-        setIsSuccess(false);
-        setFormData({
-          firstName: '', lastName: '', email: '', whatsapp: '',
-          date: '', time: '', propertyType: '', notes: ''
-        });
-      }, 3000);
+        navigate('/');
+      }, 2000);
     } catch (error) {
       console.error('[Booking API Error]', error);
       alert('There was an error submitting your booking. Please try again.');
