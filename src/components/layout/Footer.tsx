@@ -23,7 +23,11 @@ export function Footer() {
         body: JSON.stringify({ email }),
       });
 
-      if (!response.ok) throw new Error('Failed to subscribe');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('[Subscribe API Error]', response.status, errorData);
+        throw new Error(errorData.error || errorData.message || 'Failed to subscribe');
+      }
 
       setStatus('success');
       setTimeout(() => {
@@ -31,7 +35,7 @@ export function Footer() {
         setEmail('');
       }, 5000);
     } catch (error) {
-      console.error(error);
+      console.error('[Subscribe Error]', error);
       setStatus('error');
       alert('Failed to subscribe. Please try again later.');
     }
