@@ -156,8 +156,8 @@ export default async function handler(req: any, res: any) {
     await transporter.sendMail(adminMailOptions);
 
     res.status(200).json({ message: 'Booking successful' });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error sending email:', error);
-    res.status(500).json({ message: 'Error sending email', error });
+    res.status(500).json({ message: 'Error sending email', error: error?.message || String(error) });
   }
 }
