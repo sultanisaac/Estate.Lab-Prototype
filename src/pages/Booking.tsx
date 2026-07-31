@@ -140,9 +140,8 @@ export function Booking() {
                 <label className="block text-sm font-medium text-brand-text mb-1">Preferred Property Type</label>
                 <select required name="propertyType" value={formData.propertyType} onChange={handleChange} className="w-full bg-brand-background border border-brand-accent/50 rounded-md px-4 py-3 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-shadow">
                   <option value="" disabled>Select a collection...</option>
-                  <option value="starter">Starter Collection (Type 45 & 60)</option>
-                  <option value="family">Family Collection (Type 70 & 80)</option>
-                  <option value="signature">Signature Collection (Type 90 & 120)</option>
+                  <option value="starter">Starter Collection</option>
+                  <option value="family">Family Collection</option>
                   <option value="undecided">Not sure yet / General Consultation</option>
                 </select>
               </div>

@@ -34,6 +34,9 @@ export function Navbar() {
           )}>
             Estate.Lab
           </span>
+          <span className="ml-2 text-[10px] uppercase tracking-widest bg-brand-secondary/20 text-brand-secondary border border-brand-secondary/30 px-2 py-0.5 rounded-full font-bold hidden sm:inline-block">
+            Prototype
+          </span>
         </Link>
 
         {/* Desktop Menu */}
@@ -42,9 +45,9 @@ export function Navbar() {
             "flex gap-6 text-sm font-medium transition-colors",
             (isScrolled || !isHomePage) ? "text-brand-text" : "text-white/90"
           )}>
-            <a href="/#properties" className="hover:text-brand-secondary transition-colors">Properties</a>
-            <a href="/#styles" className="hover:text-brand-secondary transition-colors">Styles</a>
-            <a href="/#about" className="hover:text-brand-secondary transition-colors">About Us</a>
+            <Link to="/properties" className="hover:text-brand-secondary transition-colors">Properties</Link>
+            <Link to="/#styles" className="hover:text-brand-secondary transition-colors">Styles</Link>
+            <Link to="/#about" className="hover:text-brand-secondary transition-colors">About Us</Link>
           </div>
           <Link to="/booking">
             <Button variant={(isScrolled || !isHomePage) ? "primary" : "secondary"}>Book Viewing</Button>
@@ -78,6 +81,9 @@ export function Navbar() {
                 <span className="font-serif font-bold text-2xl tracking-tight text-brand-primary">
                   Estate.Lab
                 </span>
+                <span className="ml-2 text-[10px] uppercase tracking-widest bg-brand-secondary/20 text-brand-secondary border border-brand-secondary/30 px-2 py-0.5 rounded-full font-bold">
+                  Prototype
+                </span>
               </Link>
               <button 
                 className="text-brand-primary p-2"
@@ -88,9 +94,9 @@ export function Navbar() {
             </div>
             
             <div className="flex flex-col gap-8 mt-24 px-4">
-              <a href="/#properties" onClick={() => setMobileMenuOpen(false)} className="text-brand-primary font-serif text-4xl hover:text-brand-secondary transition-colors">Properties</a>
-              <a href="/#styles" onClick={() => setMobileMenuOpen(false)} className="text-brand-primary font-serif text-4xl hover:text-brand-secondary transition-colors">Styles</a>
-              <a href="/#about" onClick={() => setMobileMenuOpen(false)} className="text-brand-primary font-serif text-4xl hover:text-brand-secondary transition-colors">About Us</a>
+              <Link to="/properties" onClick={() => setMobileMenuOpen(false)} className="text-brand-primary font-serif text-4xl hover:text-brand-secondary transition-colors">Properties</Link>
+              <Link to="/#styles" onClick={() => setMobileMenuOpen(false)} className="text-brand-primary font-serif text-4xl hover:text-brand-secondary transition-colors">Styles</Link>
+              <Link to="/#about" onClick={() => setMobileMenuOpen(false)} className="text-brand-primary font-serif text-4xl hover:text-brand-secondary transition-colors">About Us</Link>
             </div>
             
             <div className="mt-auto px-4 pb-6 flex flex-col gap-6">

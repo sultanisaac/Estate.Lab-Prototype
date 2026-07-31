@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Maximize, Bed, Bath, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import type { PropertyType } from '../../data/properties';
 import { ImageGallery } from './ImageGallery';
 import { Button } from './Button';
@@ -55,12 +56,12 @@ export function PropertyCard({ property }: PropertyCardProps) {
               <span className="flex items-center text-sm"><Bed className="w-4 h-4 mr-1" /> {property.specs.beds}</span>
               <span className="flex items-center text-sm"><Bath className="w-4 h-4 mr-1" /> {property.specs.baths}</span>
             </div>
-            <button 
-              onClick={() => setIsGalleryOpen(true)}
+            <Link 
+              to={`/property/${property.id}`}
               className="text-brand-primary font-medium text-sm flex items-center hover:text-brand-secondary transition-colors"
             >
               Details <ArrowRight className="w-4 h-4 ml-1" />
-            </button>
+            </Link>
           </div>
         </div>
       </motion.div>

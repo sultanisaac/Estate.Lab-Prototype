@@ -51,6 +51,9 @@ export function Footer() {
               <span className="font-serif font-bold text-2xl tracking-tight text-white">
                 Estate.Lab
               </span>
+              <span className="ml-2 text-[10px] uppercase tracking-widest bg-brand-secondary/20 text-brand-secondary border border-brand-secondary/30 px-2 py-0.5 rounded-full font-bold">
+                Prototype
+              </span>
             </a>
             <p className="text-gray-400 mb-6 leading-relaxed">
               Engineered for living. Designed for you. We build premium, architecturally significant homes for the modern family.
@@ -61,7 +64,7 @@ export function Footer() {
           <div>
             <h4 className="text-white font-serif text-xl mb-6">Quick Links</h4>
             <ul className="flex flex-col gap-3">
-              <li><a href="/#properties" className="hover:text-brand-secondary transition-colors">Properties</a></li>
+              <li><Link to="/properties" className="hover:text-brand-secondary transition-colors">Properties</Link></li>
               <li><a href="/#styles" className="hover:text-brand-secondary transition-colors">Styles</a></li>
               <li><a href="/#about" className="hover:text-brand-secondary transition-colors">About Us</a></li>
               <li><Link to="/legal" className="hover:text-brand-secondary transition-colors">Legal & Privacy</Link></li>

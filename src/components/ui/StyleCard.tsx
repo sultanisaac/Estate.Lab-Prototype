@@ -1,5 +1,5 @@
-
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import type { StyleType } from '../../data/styles';
 
 interface StyleCardProps {
@@ -8,6 +8,8 @@ interface StyleCardProps {
 }
 
 export function StyleCard({ styleData, onHover }: StyleCardProps) {
+  const navigate = useNavigate();
+
   return (
     <motion.div 
       className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden group cursor-pointer"
@@ -15,6 +17,7 @@ export function StyleCard({ styleData, onHover }: StyleCardProps) {
       onMouseLeave={() => onHover(null)}
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.4 }}
+      onClick={() => navigate(`/properties?style=${styleData.id}`)}
     >
       <div className="absolute inset-0">
         <img 

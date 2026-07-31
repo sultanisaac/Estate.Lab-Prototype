@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Award, Users, PenTool, CheckCircle, Quote } from 'lucide-react';
 
@@ -9,25 +9,67 @@ import { styles } from '../data/styles';
 
 export function Home() {
   const [activeStyle, setActiveStyle] = useState<string | null>(null);
+  const [isLowConnection, setIsLowConnection] = useState<boolean>(false);
+
+  useEffect(() => {
+    // Scroll to hash on mount or when hash changes
+    if (window.location.hash) {
+      const id = window.location.hash.substring(1);
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, [window.location.hash]);
+
+  useEffect(() => {
+    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    if (connection) {
+      const checkConnection = () => {
+        if (connection.saveData || ['slow-2g', '2g', '3g'].includes(connection.effectiveType)) {
+          setIsLowConnection(true);
+        } else {
+          setIsLowConnection(false);
+        }
+      };
+      
+      checkConnection();
+      connection.addEventListener('change', checkConnection);
+      
+      return () => {
+        connection.removeEventListener('change', checkConnection);
+      };
+    }
+  }, []);
   
-  const starterCollection = properties.filter(p => p.collection === 'Starter');
-  const familyCollection = properties.filter(p => p.collection === 'Family');
-  const signatureCollection = properties.filter(p => p.collection === 'Signature');
+  const starterCollection = properties.filter(p => p.collection === 'Starter').slice(0, 3);
+  const familyCollection = properties.filter(p => p.collection === 'Family').slice(0, 3);
 
   return (
     <div className="font-sans">
       {/* Hero Section */}
       <section className="relative h-screen flex flex-col justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <video 
-            autoPlay 
-            loop 
-            muted 
-            playsInline 
-            className="w-full h-full object-cover"
-          >
-            <source src="/hero-video.mp4.mp4" type="video/mp4" />
-          </video>
+          {isLowConnection ? (
+            <img 
+              src="/hero-image.png" 
+              alt="Estate.Lab Hero" 
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <video 
+              autoPlay 
+              loop 
+              muted 
+              playsInline 
+              poster="/hero-image.png"
+              className="w-full h-full object-cover"
+            >
+              <source src="/hero-video.mp4.mp4" type="video/mp4" />
+            </video>
+          )}
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
         
@@ -124,18 +166,7 @@ export function Home() {
               </div>
             </div>
 
-            {/* Signature Collection */}
-            <div>
-              <div className="flex items-center gap-4 mb-8">
-                <h3 className="text-3xl font-serif text-brand-primary">Signature Collection</h3>
-                <div className="h-px bg-brand-accent/50 flex-1"></div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {signatureCollection.map(property => (
-                  <PropertyCard key={property.id} property={property} />
-                ))}
-              </div>
-            </div>
+            {/* Removed Signature Collection */}
           </div>
         </div>
       </section>
