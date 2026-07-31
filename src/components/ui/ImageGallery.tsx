@@ -50,6 +50,7 @@ export function ImageGallery({ property, isOpen, onClose }: ImageGalleryProps) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 md:p-8 backdrop-blur-sm"
+        onClick={onClose}
       >
         <button 
           onClick={onClose}
@@ -58,7 +59,10 @@ export function ImageGallery({ property, isOpen, onClose }: ImageGalleryProps) {
           <X className="w-8 h-8" />
         </button>
 
-        <div className="relative w-full max-w-5xl h-[70vh] md:h-[80vh] flex flex-col items-center">
+        <div 
+          className="relative w-full max-w-5xl h-[70vh] md:h-[80vh] flex flex-col items-center"
+          onClick={(e) => e.stopPropagation()}
+        >
           <div className="absolute top-0 left-0 w-full p-4 text-center z-10">
             <h3 className="text-white font-serif text-2xl">{property.name}</h3>
             <p className="text-brand-secondary">{imageLabels[currentIndex].label}</p>

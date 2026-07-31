@@ -14,7 +14,12 @@ export function Legal() {
           animate={{ opacity: 1, y: 0 }}
           className="bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-brand-accent/20"
         >
-          <h1 className="font-serif text-4xl text-brand-primary mb-8 font-bold">Legal & Privacy Policy</h1>
+          <h1 className="font-serif text-4xl text-brand-primary mb-8 font-bold flex items-center flex-wrap gap-3">
+            Legal & Privacy Policy
+            <span className="text-[12px] uppercase tracking-widest bg-brand-secondary/20 text-brand-secondary border border-brand-secondary/30 px-3 py-1 rounded-full font-bold self-start mt-2 md:mt-0">
+              Prototype
+            </span>
+          </h1>
           
           <div className="prose prose-brand max-w-none text-brand-text/80 space-y-8">
             <section>
