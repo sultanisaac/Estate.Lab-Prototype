@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Award, Users, PenTool, CheckCircle, Quote } from 'lucide-react';
+import { Shield, Award, Users, PenTool, CheckCircle, Star } from 'lucide-react';
 
 import { PropertyCard } from '../components/ui/PropertyCard';
 import { StyleCard } from '../components/ui/StyleCard';
@@ -106,13 +106,7 @@ export function Home() {
                 <p className="text-white/70 text-sm">Experience</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <Shield className="w-8 h-8 text-brand-secondary" />
-              <div className="text-left">
-                <p className="font-bold text-lg">Premium</p>
-                <p className="text-white/70 text-sm">Quality Build</p>
-              </div>
-            </div>
+
             <div className="flex items-center gap-3">
               <Users className="w-8 h-8 text-brand-secondary" />
               <div className="text-left">
@@ -243,13 +237,17 @@ export function Home() {
         
         <div className="container mx-auto px-4 md:px-8 relative z-10">
           <div className="text-center mb-16">
-            <Quote className="w-12 h-12 text-brand-secondary mx-auto mb-6 opacity-50" />
-            <h2 className="text-4xl md:text-5xl font-serif text-white font-bold mb-4">Words from Our Homeowners</h2>
+            <h2 className="text-4xl md:text-5xl text-white font-bold mb-4">Words from Our Homeowners</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl relative">
-              <p className="text-lg text-white/90 leading-relaxed mb-6 italic">"Estate.Lab found us the perfect Tropical Modern home within our budget. The attention to detail in the Type 60 is extraordinary. We particularly love how the cross-ventilation keeps the house cool all day."</p>
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl relative flex flex-col h-full">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-brand-secondary text-brand-secondary" />
+                ))}
+              </div>
+              <p className="text-lg text-white/90 leading-relaxed mb-6 italic flex-grow">"Estate.Lab found us the perfect Tropical Modern home within our budget. The attention to detail in the Type 60 is extraordinary. We particularly love how the cross-ventilation keeps the house cool all day."</p>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-brand-secondary rounded-full overflow-hidden">
                   <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150" alt="Client" className="w-full h-full object-cover"/>
@@ -261,8 +259,13 @@ export function Home() {
               </div>
             </div>
             
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl relative">
-              <p className="text-lg text-white/90 leading-relaxed mb-6 italic">"The transparency during the purchasing process was refreshing. The legal team handled everything, and the Scandinavian design of our Type 45 makes it feel incredibly spacious and bright."</p>
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl relative flex flex-col h-full">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-brand-secondary text-brand-secondary" />
+                ))}
+              </div>
+              <p className="text-lg text-white/90 leading-relaxed mb-6 italic flex-grow">"The transparency during the purchasing process was refreshing. The legal team handled everything, and the Scandinavian design of our Type 45 makes it feel incredibly spacious and bright."</p>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-brand-secondary rounded-full overflow-hidden">
                   <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150" alt="Client" className="w-full h-full object-cover"/>
