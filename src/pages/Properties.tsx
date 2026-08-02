@@ -18,8 +18,6 @@ export function Properties() {
   
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [properties, setProperties] = useState(fallbackProperties);
-  const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     async function fetchProperties() {
       try {
@@ -41,7 +39,6 @@ export function Properties() {
       } else {
         setProperties(fallbackProperties);
       }
-      setIsLoading(false);
     }
     fetchProperties();
   }, []);

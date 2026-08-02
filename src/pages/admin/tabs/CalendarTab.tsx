@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { format, startOfWeek, addDays, isSameDay, parseISO, startOfMonth, endOfMonth, endOfWeek, addMonths } from "date-fns";
-import { ChevronLeft, ChevronRight, Filter, Calendar as CalendarIcon, Phone, MapPin, X, Mail, Home, Info, Clock } from "lucide-react";
+import { ChevronLeft, ChevronRight, Filter, Calendar as CalendarIcon, Phone, MapPin, X, Mail, Home, Info } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 

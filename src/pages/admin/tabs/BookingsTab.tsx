@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, Mail, Phone, Calendar, Clock, Home, Info, Search, ArrowUpDown } from "lucide-react";
+import { X, Mail, Phone, Calendar, Home, Info, Search, ArrowUpDown } from "lucide-react";
 import { mockBookings } from "../../../data/mockAdminData";
 
 export function BookingsTab() {

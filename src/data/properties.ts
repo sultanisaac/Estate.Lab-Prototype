@@ -10,6 +10,10 @@ export interface PropertyType {
     features: string[];
   };
   description: string;
+  keyFeatures?: string[];
+  location?: string;
+  buildTime?: string;
+  customization?: string;
   images: {
     exterior: string;
     livingRoom: string;
@@ -18,6 +22,7 @@ export interface PropertyType {
     bath: string;
     multifunction: string;
     outdoor: string;
+    gallery?: string[];
   };
 }
 
