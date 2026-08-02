@@ -44,7 +44,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2 md:mb-4">
             <div className="mb-1 md:mb-0">
               <h3 className="text-lg md:text-2xl font-serif text-brand-primary mb-1 line-clamp-1">{property.name}</h3>
-              <p className="text-brand-text/70 text-xs md:text-sm line-clamp-1">{property.specs.features[0]}</p>
+              <p className="text-brand-text/70 text-xs md:text-sm line-clamp-1">{property.specs?.features?.[0] || property.keyFeatures?.[0] || 'Premium Property'}</p>
             </div>
             <span className="text-brand-secondary font-medium text-sm md:text-base">{property.specs.area}</span>
           </div>
