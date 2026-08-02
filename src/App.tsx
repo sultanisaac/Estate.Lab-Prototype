@@ -8,6 +8,7 @@ import { Legal } from './pages/Legal';
 import { PropertyDetails } from './pages/PropertyDetails';
 import { Properties } from './pages/Properties';
 import { PageTransition } from './components/layout/PageTransition';
+import { AdminLayout } from './pages/admin/AdminLayout';
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -20,21 +21,35 @@ function AnimatedRoutes() {
         <Route path="/properties" element={<PageTransition><Properties /></PageTransition>} />
         <Route path="/booking" element={<PageTransition><Booking /></PageTransition>} />
         <Route path="/legal" element={<PageTransition><Legal /></PageTransition>} />
+        <Route path="/admin/*" element={<AdminLayout />} />
       </Routes>
     </AnimatePresence>
+  );
+}
+
+function AppLayout() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
+
+  if (isAdmin) {
+    return <AnimatedRoutes />;
+  }
+
+  return (
+    <div className="min-h-screen font-sans selection:bg-brand-secondary/30 selection:text-brand-primary flex flex-col">
+      <Navbar />
+      <main className="flex-grow">
+        <AnimatedRoutes />
+      </main>
+      <Footer />
+    </div>
   );
 }
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen font-sans selection:bg-brand-secondary/30 selection:text-brand-primary flex flex-col">
-        <Navbar />
-        <main className="flex-grow">
-          <AnimatedRoutes />
-        </main>
-        <Footer />
-      </div>
+      <AppLayout />
     </Router>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Award, Users, PenTool, CheckCircle, Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Shield, Award, Users, PenTool, CheckCircle, Star, ArrowRight } from 'lucide-react';
 
 import { PropertyCard } from '../components/ui/PropertyCard';
 import { StyleCard } from '../components/ui/StyleCard';
@@ -8,6 +9,7 @@ import { properties } from '../data/properties';
 import { styles } from '../data/styles';
 
 export function Home() {
+  const navigate = useNavigate();
   const [activeStyle, setActiveStyle] = useState<string | null>(null);
   const [isLowConnection, setIsLowConnection] = useState<boolean>(false);
 
@@ -44,8 +46,8 @@ export function Home() {
     }
   }, []);
   
-  const starterCollection = properties.filter(p => p.collection === 'Starter').slice(0, 3);
-  const familyCollection = properties.filter(p => p.collection === 'Family').slice(0, 3);
+  const starterCollection = properties.filter(p => p.collection === 'Starter').slice(0, 4);
+  const familyCollection = properties.filter(p => p.collection === 'Family').slice(0, 4);
 
   return (
     <div className="font-sans">
@@ -140,10 +142,21 @@ export function Home() {
                 <h3 className="text-3xl font-serif text-brand-primary">Starter Collection</h3>
                 <div className="h-px bg-brand-accent/50 flex-1"></div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
                 {starterCollection.map(property => (
                   <PropertyCard key={property.id} property={property} />
                 ))}
+              </div>
+              <div className="mt-10 flex justify-center">
+                <button 
+                  onClick={() => {
+                    navigate('/properties?collection=starter');
+                    window.scrollTo(0, 0);
+                  }}
+                  className="flex items-center gap-2 px-8 py-3 bg-transparent border border-[#0F4C5C] text-[#0F4C5C] font-medium hover:bg-[#0F4C5C] hover:text-white transition-colors duration-300"
+                >
+                  Show more Starter properties <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
             </div>
 
@@ -153,10 +166,21 @@ export function Home() {
                 <h3 className="text-3xl font-serif text-brand-primary">Family Collection</h3>
                 <div className="h-px bg-brand-accent/50 flex-1"></div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
                 {familyCollection.map(property => (
                   <PropertyCard key={property.id} property={property} />
                 ))}
+              </div>
+              <div className="mt-10 flex justify-center">
+                <button 
+                  onClick={() => {
+                    navigate('/properties?collection=family');
+                    window.scrollTo(0, 0);
+                  }}
+                  className="flex items-center gap-2 px-8 py-3 bg-transparent border border-[#0F4C5C] text-[#0F4C5C] font-medium hover:bg-[#0F4C5C] hover:text-white transition-colors duration-300"
+                >
+                  Show more Family properties <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
             </div>
 
