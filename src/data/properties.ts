@@ -209,7 +209,22 @@ export const properties: PropertyType[] = [
     collection: 'Family',
     style: 'tropis',
     specs: { area: '85 m²', beds: 4, baths: 3, features: ['Pool Option', 'Airflow Design'] },
-    description: 'The pinnacle of family living with seamless natural integration and premium space.',
-    images: { ...defaultImages, exterior: 'https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&q=80&w=800' }
+    description: 'The pinnacle of family living with seamless natural integration and premium space. Designed for those who value indoor-outdoor connection, privacy, and absolute comfort.',
+    keyFeatures: [
+      'Private Swimming Pool (Optional)',
+      'Smart Airflow & Cross Ventilation System',
+      'Seamless Indoor-Outdoor Living Area',
+      'Luxurious Master Suite with Zen Bathroom',
+      'Premium Natural Wood & Stone Finishes'
+    ],
+    images: { 
+      ...defaultImages, 
+      exterior: 'https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&q=80&w=800',
+      livingRoom: '/generated-images/type85_living_room_1785697061540.png',
+      kitchen: '/generated-images/type85_kitchen_1785697076671.png',
+      masterBed: '/generated-images/type85_master_bedroom_1785697088711.png',
+      bath: '/generated-images/type85_bathroom_1785697100178.png',
+      outdoor: '/generated-images/type85_outdoor_1785697112834.png'
+    }
   }
 ];
