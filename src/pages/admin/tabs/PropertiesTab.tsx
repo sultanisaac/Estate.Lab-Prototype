@@ -11,7 +11,7 @@ export function PropertiesTab() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState<'exterior' | 'gallery' | null>(null);
+  const [isUploading, setIsUploading] = useState<string | null>(null);
   const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   
@@ -31,7 +31,7 @@ export function PropertiesTab() {
     buildTime: '4-6 Months',
     customization: 'Available',
     specs: { area: '', beds: 1, baths: 1, features: '' },
-    images: { exterior: '', gallery: '' } 
+    images: { exterior: '', livingRoom: '', kitchen: '', masterBed: '', bath: '', outdoor: '', gallery: '' } 
   };
   const [newProperty, setNewProperty] = useState(initialPropertyState);
 
@@ -86,10 +86,15 @@ export function PropertiesTab() {
             customization: prop.customization || 'Available',
             specs: prop.specs || { area: '', beds: 1, baths: 1 },
             keyFeatures: prop.keyFeatures || [],
-            images: {
-              exterior: prop.images?.exterior || (prop as any).image || '',
-              gallery: []
-            }
+              images: {
+                exterior: prop.images?.exterior || (prop as any).image || '',
+                livingRoom: prop.images?.livingRoom || prop.images?.gallery?.[0] || '',
+                kitchen: prop.images?.kitchen || prop.images?.gallery?.[1] || '',
+                masterBed: prop.images?.masterBed || prop.images?.gallery?.[2] || '',
+                bath: prop.images?.bath || prop.images?.gallery?.[3] || '',
+                outdoor: prop.images?.outdoor || prop.images?.gallery?.[4] || '',
+                gallery: []
+              }
           })
         });
       }
@@ -107,7 +112,7 @@ export function PropertiesTab() {
     }
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'exterior' | 'gallery') => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -162,7 +167,12 @@ export function PropertiesTab() {
       keyFeatures: newProperty.specs.features.split(',').map(f => f.trim()).filter(Boolean),
       images: {
         exterior: newProperty.images.exterior,
-        gallery: newProperty.images.gallery ? [newProperty.images.gallery] : []
+        livingRoom: newProperty.images.livingRoom,
+        kitchen: newProperty.images.kitchen,
+        masterBed: newProperty.images.masterBed,
+        bath: newProperty.images.bath,
+        outdoor: newProperty.images.outdoor,
+        gallery: []
       }
     };
 
@@ -216,7 +226,12 @@ export function PropertiesTab() {
       },
       images: {
         exterior: property.images?.exterior || property.image || '',
-        gallery: property.images?.gallery?.[0] || ''
+        livingRoom: property.images?.livingRoom || property.images?.gallery?.[0] || '',
+        kitchen: property.images?.kitchen || property.images?.gallery?.[1] || '',
+        masterBed: property.images?.masterBed || property.images?.gallery?.[2] || '',
+        bath: property.images?.bath || property.images?.gallery?.[3] || '',
+        outdoor: property.images?.outdoor || property.images?.gallery?.[4] || '',
+        gallery: ''
       }
     });
     setIsModalOpen(true);
@@ -539,64 +554,42 @@ export function PropertiesTab() {
               {/* SECTION: Images */}
               <div>
                 <h4 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Property Images</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  
-                  {/* Landing / Exterior Image */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Landing Page Image (Exterior)</label>
-                    {newProperty.images.exterior ? (
-                      <div className="relative h-48 rounded-xl overflow-hidden border border-gray-200">
-                        <img src={newProperty.images.exterior} alt="Preview" className="w-full h-full object-cover" />
-                        <button type="button" onClick={() => setNewProperty({...newProperty, images: {...newProperty.images, exterior: ''}})} className="absolute top-2 right-2 bg-black/50 text-white p-1.5 rounded-full hover:bg-black/70"><X size={16} /></button>
-                      </div>
-                    ) : (
-                      <div className="relative">
-                        <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'exterior')} disabled={!!isUploading} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed" />
-                        <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl h-48 bg-gray-50 hover:bg-gray-100 transition-colors">
-                          {isUploading === 'exterior' ? (
-                            <div className="flex flex-col items-center space-y-2">
-                              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#0F4C5C]"></div>
-                              <span className="text-sm text-gray-500">Uploading...</span>
-                            </div>
-                          ) : (
-                            <div className="flex flex-col items-center space-y-2 text-gray-500">
-                              <Upload size={24} className="text-[#0F4C5C]/60" />
-                              <span className="text-sm font-medium">Upload Exterior Photo</span>
-                            </div>
-                          )}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[
+                    { key: 'exterior', label: 'Landing Page (Exterior)' },
+                    { key: 'livingRoom', label: 'Living Room' },
+                    { key: 'kitchen', label: 'Kitchen & Dining' },
+                    { key: 'masterBed', label: 'Master Bedroom' },
+                    { key: 'bath', label: 'Bathroom' },
+                    { key: 'outdoor', label: 'Outdoor / Garden' }
+                  ].map((imgField) => (
+                    <div key={imgField.key}>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">{imgField.label}</label>
+                      {newProperty.images[imgField.key as keyof typeof newProperty.images] ? (
+                        <div className="relative h-48 rounded-xl overflow-hidden border border-gray-200">
+                          <img src={newProperty.images[imgField.key as keyof typeof newProperty.images]} alt="Preview" className="w-full h-full object-cover" />
+                          <button type="button" onClick={() => setNewProperty({...newProperty, images: {...newProperty.images, [imgField.key]: ''}})} className="absolute top-2 right-2 bg-black/50 text-white p-1.5 rounded-full hover:bg-black/70"><X size={16} /></button>
                         </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Property Gallery Image */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Property Gallery Image</label>
-                    {newProperty.images.gallery ? (
-                      <div className="relative h-48 rounded-xl overflow-hidden border border-gray-200">
-                        <img src={newProperty.images.gallery} alt="Preview" className="w-full h-full object-cover" />
-                        <button type="button" onClick={() => setNewProperty({...newProperty, images: {...newProperty.images, gallery: ''}})} className="absolute top-2 right-2 bg-black/50 text-white p-1.5 rounded-full hover:bg-black/70"><X size={16} /></button>
-                      </div>
-                    ) : (
-                      <div className="relative">
-                        <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'gallery')} disabled={!!isUploading} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed" />
-                        <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl h-48 bg-gray-50 hover:bg-gray-100 transition-colors">
-                          {isUploading === 'gallery' ? (
-                            <div className="flex flex-col items-center space-y-2">
-                              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#0F4C5C]"></div>
-                              <span className="text-sm text-gray-500">Uploading...</span>
-                            </div>
-                          ) : (
-                            <div className="flex flex-col items-center space-y-2 text-gray-500">
-                              <Upload size={24} className="text-[#0F4C5C]/60" />
-                              <span className="text-sm font-medium">Upload Gallery Photo</span>
-                            </div>
-                          )}
+                      ) : (
+                        <div className="relative">
+                          <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, imgField.key)} disabled={!!isUploading} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed" />
+                          <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl h-48 bg-gray-50 hover:bg-gray-100 transition-colors">
+                            {isUploading === imgField.key ? (
+                              <div className="flex flex-col items-center space-y-2">
+                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#0F4C5C]"></div>
+                                <span className="text-sm text-gray-500">Uploading...</span>
+                              </div>
+                            ) : (
+                              <div className="flex flex-col items-center space-y-2 text-gray-500">
+                                <Upload size={24} className="text-[#0F4C5C]/60" />
+                                <span className="text-sm font-medium">Upload Image</span>
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
 
