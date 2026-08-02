@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Plus, X, Upload, Image as ImageIcon, Search } from 'lucide-react';
+import { Plus, X, Upload, Image as ImageIcon, Search, Filter } from 'lucide-react';
 import { properties as frontendProperties } from '../../../data/properties';
+import { styles } from '../../../data/styles';
 
 export function PropertiesTab() {
   const [properties, setProperties] = useState<any[]>(
@@ -13,6 +14,12 @@ export function PropertiesTab() {
   const [isUploading, setIsUploading] = useState<'exterior' | 'gallery' | null>(null);
   const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Filters
+  const [selectedStyle, setSelectedStyle] = useState<string>('all');
+  const [selectedCollection, setSelectedCollection] = useState<string>('all');
+  const [minBeds, setMinBeds] = useState<number>(0);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   
   const initialPropertyState = { 
     name: '', 
@@ -236,15 +243,76 @@ export function PropertiesTab() {
         </div>
       </div>
 
-      <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-        <input 
-          type="text" 
-          placeholder="Search properties by name or collection..." 
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-12 pr-4 py-3 bg-white border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F4C5C]/20 shadow-sm"
-        />
+      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+            <input 
+              type="text" 
+              placeholder="Search properties by name or collection..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F4C5C]/20 shadow-sm transition-all"
+            />
+          </div>
+          <button 
+            onClick={() => setIsFilterOpen(!isFilterOpen)}
+            className="md:hidden flex items-center justify-center gap-2 bg-gray-100 px-4 py-3 rounded-xl text-gray-700"
+          >
+            <Filter className="w-4 h-4" /> Filters
+          </button>
+        </div>
+
+        {/* Filters */}
+        {(isFilterOpen || window.innerWidth >= 768) && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 mt-4 border-t border-gray-100">
+            {/* Style Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Architectural Style</label>
+              <select
+                className="w-full pl-3 pr-10 py-2.5 text-base border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#0F4C5C]/20 rounded-xl"
+                value={selectedStyle}
+                onChange={(e) => setSelectedStyle(e.target.value)}
+              >
+                <option value="all">All Styles</option>
+                {styles.map(style => (
+                  <option key={style.id} value={style.id}>{style.name}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Collection Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Collection</label>
+              <select
+                className="w-full pl-3 pr-10 py-2.5 text-base border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#0F4C5C]/20 rounded-xl"
+                value={selectedCollection}
+                onChange={(e) => setSelectedCollection(e.target.value)}
+              >
+                <option value="all">All Collections</option>
+                <option value="starter">Starter</option>
+                <option value="signature">Signature</option>
+                <option value="signature+">Signature+</option>
+              </select>
+            </div>
+
+            {/* Beds Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Minimum Bedrooms</label>
+              <select
+                className="w-full pl-3 pr-10 py-2.5 text-base border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#0F4C5C]/20 rounded-xl"
+                value={minBeds}
+                onChange={(e) => setMinBeds(Number(e.target.value))}
+              >
+                <option value={0}>Any</option>
+                <option value={1}>1+ Beds</option>
+                <option value={2}>2+ Beds</option>
+                <option value={3}>3+ Beds</option>
+                <option value={4}>4+ Beds</option>
+              </select>
+            </div>
+          </div>
+        )}
       </div>
 
       {loading ? (
@@ -255,8 +323,14 @@ export function PropertiesTab() {
             .filter(p => {
                const searchLower = searchQuery.toLowerCase();
                const nameMatches = (p.name || p.title || '').toLowerCase().includes(searchLower);
-               const collectionMatches = (p.collection || '').toLowerCase().includes(searchLower);
-               return nameMatches || collectionMatches;
+               const collectionSearchMatches = (p.collection || '').toLowerCase().includes(searchLower);
+               const matchesSearch = nameMatches || collectionSearchMatches;
+
+               const matchesStyle = selectedStyle === 'all' || p.style === selectedStyle;
+               const matchesCollection = selectedCollection === 'all' || (p.collection || '').toLowerCase() === selectedCollection.toLowerCase();
+               const matchesBeds = minBeds === 0 || ((p.specs?.beds || 0) >= minBeds);
+
+               return matchesSearch && matchesStyle && matchesCollection && matchesBeds;
             })
             .map((property) => (
             <div key={property.id} className={`bg-white rounded-2xl shadow-sm border overflow-hidden flex flex-col transition-colors ${selectedProperties.includes(property.id) ? 'border-[#0F4C5C] ring-1 ring-[#0F4C5C]' : 'border-gray-100'}`}>
