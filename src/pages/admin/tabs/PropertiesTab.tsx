@@ -65,6 +65,48 @@ export function PropertiesTab() {
     fetchProperties();
   }, []);
 
+  const handleSeedDemoProperties = async () => {
+    setLoading(true);
+    try {
+      const demoProps = frontendProperties.map(p => ({ ...p, status: 'Available' }));
+      for (const prop of demoProps) {
+        await fetch('/api/admin/properties', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: `p-${Date.now()}-${Math.random()}`,
+            name: prop.name || prop.title,
+            title: prop.name || prop.title,
+            collection: prop.collection || 'Starter',
+            status: 'Available',
+            style: prop.style || 'minimalis',
+            description: prop.description || '',
+            location: prop.location || 'Prime Location',
+            buildTime: prop.buildTime || '4-6 Months',
+            customization: prop.customization || 'Available',
+            specs: prop.specs || { area: '', beds: 1, baths: 1 },
+            keyFeatures: prop.keyFeatures || [],
+            images: {
+              exterior: prop.image || '',
+              gallery: []
+            }
+          })
+        });
+      }
+      // Re-fetch from DB
+      const res = await fetch('/api/admin/properties');
+      if (res.ok) {
+        const data = await res.json();
+        setProperties(data);
+        localStorage.setItem('dev_properties', JSON.stringify(data));
+      }
+    } catch (err) {
+      alert("Failed to import demo properties.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'exterior' | 'gallery') => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -317,6 +359,31 @@ export function PropertiesTab() {
 
       {loading ? (
         <div className="p-8 text-center text-gray-500">Loading properties...</div>
+      ) : properties.length === 0 ? (
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center flex flex-col items-center justify-center space-y-4">
+          <div className="w-16 h-16 bg-blue-50 text-[#0F4C5C] rounded-full flex items-center justify-center mb-2">
+            <ImageIcon size={32} />
+          </div>
+          <h3 className="text-xl font-bold text-gray-900">Your Property Catalog is Empty</h3>
+          <p className="text-gray-500 max-w-md mx-auto">
+            It looks like this is a fresh Vercel database! You can start adding properties manually, or import the demo properties to get started instantly.
+          </p>
+          <div className="flex gap-4 pt-4">
+            <button 
+              onClick={handleSeedDemoProperties}
+              className="bg-gray-100 text-gray-700 px-6 py-2.5 rounded-xl font-medium hover:bg-gray-200 transition-colors"
+            >
+              Import Demo Properties
+            </button>
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="bg-[#0F4C5C] text-white px-6 py-2.5 rounded-xl font-medium flex items-center space-x-2 hover:bg-[#0F4C5C]/90 transition-colors"
+            >
+              <Plus size={20} />
+              <span>Add Property</span>
+            </button>
+          </div>
+        </div>
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {properties
