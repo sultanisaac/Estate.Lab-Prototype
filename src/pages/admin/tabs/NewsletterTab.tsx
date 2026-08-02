@@ -98,6 +98,13 @@ export function NewsletterTab() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Double check that it's actually a CSV file (extra security)
+    if (file.type !== 'text/csv' && !file.name.toLowerCase().endsWith('.csv')) {
+      alert("Invalid file type. Please upload a .csv file.");
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
     setIsImporting(true);
     try {
       const text = await file.text();
