@@ -21,26 +21,39 @@ const imageLabels = [
 export function ImageGallery({ property, isOpen, onClose }: ImageGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const availableImages = imageLabels.filter(item => {
+    const img = property.images[item.key as keyof typeof property.images];
+    return typeof img === 'string' && img.trim() !== '';
+  });
+
+  // Reset index when opening to avoid out-of-bounds
   useEffect(() => {
-    if (!isOpen) return;
+    if (isOpen) {
+      setCurrentIndex(0);
+    }
+  }, [isOpen, property.id]);
+
+  useEffect(() => {
+    if (!isOpen || availableImages.length === 0) return;
     
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowRight') setCurrentIndex((prev) => (prev + 1) % 6);
-      if (e.key === 'ArrowLeft') setCurrentIndex((prev) => (prev - 1 + 6) % 6);
+      if (e.key === 'ArrowRight') setCurrentIndex((prev) => (prev + 1) % availableImages.length);
+      if (e.key === 'ArrowLeft') setCurrentIndex((prev) => (prev - 1 + availableImages.length) % availableImages.length);
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, availableImages.length]);
 
   if (!isOpen) return null;
+  if (availableImages.length === 0) return null;
 
-  const nextImage = () => setCurrentIndex((prev) => (prev + 1) % 6);
-  const prevImage = () => setCurrentIndex((prev) => (prev - 1 + 6) % 6);
+  const nextImage = () => setCurrentIndex((prev) => (prev + 1) % availableImages.length);
+  const prevImage = () => setCurrentIndex((prev) => (prev - 1 + availableImages.length) % availableImages.length);
   
-  const currentKey = imageLabels[currentIndex].key as keyof typeof property.images;
-  const currentImage = property.images[currentKey];
+  const currentItem = availableImages[currentIndex];
+  const currentImage = property.images[currentItem.key as keyof typeof property.images];
 
   return (
     <AnimatePresence>
@@ -64,7 +77,7 @@ export function ImageGallery({ property, isOpen, onClose }: ImageGalleryProps) {
         >
           <div className="absolute top-0 left-0 w-full p-4 text-center z-10">
             <h3 className="text-white font-serif text-2xl">{property.name}</h3>
-            <p className="text-brand-secondary">{imageLabels[currentIndex].label}</p>
+            <p className="text-brand-secondary">{currentItem.label}</p>
           </div>
           
           <button 
@@ -81,7 +94,7 @@ export function ImageGallery({ property, isOpen, onClose }: ImageGalleryProps) {
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
             src={currentImage as string} 
-            alt={imageLabels[currentIndex].label}
+            alt={currentItem.label}
             className="w-full h-full object-contain md:object-cover rounded-xl"
           />
 
@@ -93,7 +106,7 @@ export function ImageGallery({ property, isOpen, onClose }: ImageGalleryProps) {
           </button>
 
           <div className="absolute bottom-4 left-0 w-full flex justify-center gap-1 md:gap-2 z-10 px-2 md:px-4 pb-2">
-            {imageLabels.map((item, idx) => (
+            {availableImages.map((item, idx) => (
               <button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
