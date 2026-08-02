@@ -3,14 +3,9 @@ import { AdminLogin } from './AdminLogin';
 import { AdminDashboard } from './AdminDashboard';
 
 export function AdminLayout() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const auth = sessionStorage.getItem('isAdminAuthenticated');
-    if (auth === 'true') {
-      setIsAuthenticated(true);
-    }
-  }, []);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return sessionStorage.getItem('isAdminAuthenticated') === 'true';
+  });
 
   const handleLogin = () => {
     sessionStorage.setItem('isAdminAuthenticated', 'true');

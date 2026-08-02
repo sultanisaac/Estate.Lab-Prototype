@@ -1,3 +1,4 @@
+import { kv } from '@vercel/kv';
 import nodemailer from 'nodemailer';
 
 export default async function handler(req: any, res: any) {
@@ -39,6 +40,27 @@ export default async function handler(req: any, res: any) {
     const ampm = h >= 12 ? 'PM' : 'AM';
     const h12 = h % 12 || 12;
     formattedTime = `${h12.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+  }
+
+  try {
+    // Save to Vercel KV
+    const newBooking = {
+      id: Date.now().toString(),
+      name: `${firstName} ${lastName}`,
+      email,
+      phone: whatsapp,
+      property: displayPropertyType,
+      date,
+      time,
+      status: 'Pending',
+      notes: notes || '',
+      createdAt: new Date().toISOString()
+    };
+    
+    await kv.lpush('bookings', newBooking);
+  } catch (kvError) {
+    console.error('Error saving to KV:', kvError);
+    // We continue with the email even if KV fails for some reason
   }
 
   // We expect EMAIL_USER and EMAIL_PASS to be set in the environment (.env.local for dev, Vercel for prod)

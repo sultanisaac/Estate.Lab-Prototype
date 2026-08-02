@@ -1,3 +1,4 @@
+import { kv } from '@vercel/kv';
 import nodemailer from 'nodemailer';
 
 export default async function handler(req: any, res: any) {
@@ -9,6 +10,23 @@ export default async function handler(req: any, res: any) {
 
   if (!email) {
     return res.status(400).json({ message: 'Email is required' });
+  }
+
+  try {
+    // Save to Vercel KV
+    const newLead = {
+      id: Date.now().toString(),
+      email,
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      status: 'Active',
+      source: 'Homepage Footer',
+      createdAt: new Date().toISOString()
+    };
+    
+    await kv.lpush('leads', newLead);
+  } catch (kvError) {
+    console.error('Error saving lead to KV:', kvError);
+    // We continue with the email even if KV fails
   }
 
   const transporter = nodemailer.createTransport({

@@ -11,11 +11,28 @@ function cn(...inputs: ClassValue[]) {
 import { mockBookings } from "../../../data/mockAdminData";
 
 export function CalendarTab() {
+  const [bookings, setBookings] = useState<any[]>(mockBookings);
   const [currentDate, setCurrentDate] = useState(new Date("2026-10-24")); // Reference date matching mock data
   const [viewMode, setViewMode] = useState<"daily" | "weekly" | "monthly">("weekly");
   const [filterMode, setFilterMode] = useState<"all" | "Pending" | "Contacted" | "Closed">("all");
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const filterDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    async function fetchBookings() {
+      try {
+        const res = await fetch('/api/admin/bookings');
+        if (!res.ok) throw new Error('API not available');
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setBookings(data);
+        }
+      } catch (err) {
+        console.log('Using mock bookings data for local development.');
+      }
+    }
+    fetchBookings();
+  }, []);
 
   // Set initial view mode based on screen size and listen for resizes
   useEffect(() => {
@@ -41,7 +58,7 @@ export function CalendarTab() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const filteredBookings = mockBookings.filter(b => {
+  const filteredBookings = bookings.filter(b => {
     if (filterMode === "all") return true;
     return b.status === filterMode;
   });
