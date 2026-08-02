@@ -25,7 +25,7 @@ export function Navbar() {
       "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
       (isScrolled || !isHomePage) ? "bg-white/90 backdrop-blur-md shadow-sm py-4" : "bg-transparent py-6"
     )}>
-      <div className="container mx-auto px-4 md:px-8 flex justify-between items-center">
+      <div className="max-w-5xl mx-auto px-4 md:px-8 flex justify-between items-center">
         <Link to="/" className="flex items-center gap-2">
           <img src="/logo.png" alt="Estate.Lab Logo" className="w-10 h-10 object-contain rounded-md shadow-sm" />
           <span className={clsx(
@@ -46,8 +46,7 @@ export function Navbar() {
             (isScrolled || !isHomePage) ? "text-brand-text" : "text-white/90"
           )}>
             <Link to="/properties" className="hover:text-brand-secondary transition-colors">Properties</Link>
-            <Link to="/#styles" className="hover:text-brand-secondary transition-colors">Styles</Link>
-            <Link to="/#about" className="hover:text-brand-secondary transition-colors">About Us</Link>
+            <Link to="/aboutus" className="hover:text-brand-secondary transition-colors">About Us</Link>
           </div>
           <Link to="/booking">
             <Button variant={(isScrolled || !isHomePage) ? "primary" : "secondary"}>Book Viewing</Button>
@@ -95,8 +94,7 @@ export function Navbar() {
             
             <div className="flex flex-col gap-8 mt-24 px-4">
               <Link to="/properties" onClick={() => setMobileMenuOpen(false)} className="text-brand-primary font-serif text-4xl hover:text-brand-secondary transition-colors">Properties</Link>
-              <Link to="/#styles" onClick={() => setMobileMenuOpen(false)} className="text-brand-primary font-serif text-4xl hover:text-brand-secondary transition-colors">Styles</Link>
-              <Link to="/#about" onClick={() => setMobileMenuOpen(false)} className="text-brand-primary font-serif text-4xl hover:text-brand-secondary transition-colors">About Us</Link>
+              <Link to="/aboutus" onClick={() => setMobileMenuOpen(false)} className="text-brand-primary font-serif text-4xl hover:text-brand-secondary transition-colors">About Us</Link>
             </div>
             
             <div className="mt-auto px-4 pb-6 flex flex-col gap-6">

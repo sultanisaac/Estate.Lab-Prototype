@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    @apply bg-brand-background text-brand-text font-sans antialiased selection:bg-brand-secondary/30 selection:text-brand-primary;
+    @apply bg-brand-background text-brand-text font-sans antialiased selection:bg-brand-secondary/30 selection:text-brand-primary overflow-x-hidden;
   }
   
   h1, h2, h3, h4, h5, h6 {

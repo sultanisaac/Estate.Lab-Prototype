@@ -7,6 +7,7 @@ import { Booking } from './pages/Booking';
 import { Legal } from './pages/Legal';
 import { PropertyDetails } from './pages/PropertyDetails';
 import { Properties } from './pages/Properties';
+import { AboutUs } from './pages/AboutUs';
 import { PageTransition } from './components/layout/PageTransition';
 import { AdminLayout } from './pages/admin/AdminLayout';
 
@@ -19,6 +20,7 @@ function AnimatedRoutes() {
         <Route path="/" element={<PageTransition><Home /></PageTransition>} />
         <Route path="/property/:id" element={<PageTransition><PropertyDetails /></PageTransition>} />
         <Route path="/properties" element={<PageTransition><Properties /></PageTransition>} />
+        <Route path="/aboutus" element={<PageTransition><AboutUs /></PageTransition>} />
         <Route path="/booking" element={<PageTransition><Booking /></PageTransition>} />
         <Route path="/legal" element={<PageTransition><Legal /></PageTransition>} />
         <Route path="/admin/*" element={<AdminLayout />} />
