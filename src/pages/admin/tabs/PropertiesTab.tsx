@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Plus, X, Upload, Image as ImageIcon, Search, Filter } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Plus, X, Upload, Image as ImageIcon, Search, Filter, Trash2 } from 'lucide-react';
 import { properties as frontendProperties } from '../../../data/properties';
 import { styles } from '../../../data/styles';
 
@@ -12,6 +13,7 @@ export function PropertiesTab() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState<string | null>(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean, ids: string[] }>({ isOpen: false, ids: [] });
   const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   
@@ -243,8 +245,13 @@ export function PropertiesTab() {
     setNewProperty(initialPropertyState);
   };
 
-  const handleDelete = async (ids: string[]) => {
-    if (!confirm(`Are you sure you want to delete ${ids.length > 1 ? 'these properties' : 'this property'}?`)) return;
+  const confirmDelete = (ids: string[]) => {
+    setDeleteConfirmation({ isOpen: true, ids });
+  };
+
+  const executeDelete = async () => {
+    const ids = deleteConfirmation.ids;
+    if (ids.length === 0) return;
 
     try {
       const res = await fetch('/api/admin/properties', {
@@ -265,6 +272,7 @@ export function PropertiesTab() {
       localStorage.setItem('dev_properties', JSON.stringify(newProps));
       setSelectedProperties([]);
     }
+    setDeleteConfirmation({ isOpen: false, ids: [] });
   };
 
   const toggleSelection = (id: string) => {
@@ -285,7 +293,7 @@ export function PropertiesTab() {
         <div className="flex space-x-3">
           {selectedProperties.length > 0 && (
             <button 
-              onClick={() => handleDelete(selectedProperties)}
+              onClick={() => confirmDelete(selectedProperties)}
               className="bg-red-50 text-red-600 border border-red-200 px-4 py-2 rounded-xl flex items-center space-x-2 hover:bg-red-100 transition-colors"
             >
               <span>Delete Selected ({selectedProperties.length})</span>
@@ -452,7 +460,7 @@ export function PropertiesTab() {
                 
                 <div className="mt-auto pt-3 md:pt-4 border-t border-gray-100 flex justify-between">
                   <button onClick={() => handleEdit(property)} className="text-[#0F4C5C] text-xs md:text-sm font-medium hover:underline">Edit</button>
-                  <button onClick={() => handleDelete([property.id])} className="text-gray-400 hover:text-red-500 text-xs md:text-sm font-medium">Delete</button>
+                  <button onClick={() => confirmDelete([property.id])} className="text-gray-400 hover:text-red-500 text-xs md:text-sm font-medium">Delete</button>
                 </div>
               </div>
             </div>
@@ -613,6 +621,57 @@ export function PropertiesTab() {
           </div>
         </div>
       )}
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {deleteConfirmation.isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setDeleteConfirmation({ isOpen: false, ids: [] })}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="bg-white rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl p-6 md:p-8 relative"
+              onClick={e => e.stopPropagation()}
+            >
+              <button 
+                onClick={() => setDeleteConfirmation({ isOpen: false, ids: [] })}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X size={20} />
+              </button>
+
+              <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Trash2 size={32} />
+              </div>
+              
+              <h3 className="text-xl font-serif font-bold text-center text-gray-900 mb-2">Delete Property?</h3>
+              <p className="text-center text-gray-500 mb-8 text-sm leading-relaxed">
+                Are you sure you want to delete {deleteConfirmation.ids.length > 1 ? `these ${deleteConfirmation.ids.length} properties` : 'this property'}? This action is permanent and cannot be undone.
+              </p>
+              
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => setDeleteConfirmation({ isOpen: false, ids: [] })}
+                  className="flex-1 bg-gray-100 text-gray-700 py-2.5 rounded-xl font-medium hover:bg-gray-200 transition-colors text-sm"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={executeDelete}
+                  className="flex-1 bg-red-500 text-white py-2.5 rounded-xl font-medium hover:bg-red-600 transition-colors text-sm shadow-lg shadow-red-500/20"
+                >
+                  Delete
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
