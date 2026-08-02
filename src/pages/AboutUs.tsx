@@ -46,7 +46,7 @@ export function AboutUs() {
         <div className="container mx-auto px-4 md:px-8">
           <div className="grid md:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
             <div>
-              <h2 className="font-serif text-4xl mb-6">Our Philosophy</h2>
+              <h2 className="text-white font-serif text-4xl mb-6">Our Philosophy</h2>
               <p className="text-white/80 text-lg leading-relaxed mb-6">
                 We believe that space shapes behavior. A well-designed home doesn't just look beautiful, it enhances your daily life, reduces friction, and inspires you to live better.
               </p>
