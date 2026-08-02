@@ -65,8 +65,7 @@ export function Footer() {
             <h4 className="text-white font-serif text-xl mb-6">Quick Links</h4>
             <ul className="flex flex-col gap-3">
               <li><Link to="/properties" className="hover:text-brand-secondary transition-colors">Properties</Link></li>
-              <li><a href="/#styles" className="hover:text-brand-secondary transition-colors">Styles</a></li>
-              <li><a href="/#about" className="hover:text-brand-secondary transition-colors">About Us</a></li>
+              <li><Link to="/aboutus" className="hover:text-brand-secondary transition-colors">About Us</Link></li>
               <li><Link to="/legal" className="hover:text-brand-secondary transition-colors">Legal & Privacy</Link></li>
             </ul>
           </div>

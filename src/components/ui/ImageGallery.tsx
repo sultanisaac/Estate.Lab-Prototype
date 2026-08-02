@@ -81,7 +81,7 @@ export function ImageGallery({ property, isOpen, onClose }: ImageGalleryProps) {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
-            src={currentImage} 
+            src={currentImage as string} 
             alt={imageLabels[currentIndex].label}
             className="w-full h-full object-contain md:object-cover rounded-xl"
           />
@@ -101,7 +101,7 @@ export function ImageGallery({ property, isOpen, onClose }: ImageGalleryProps) {
                 className={`flex-1 max-w-[64px] md:max-w-[96px] aspect-video rounded-sm md:rounded-md overflow-hidden border-2 transition-all ${idx === currentIndex ? 'border-brand-secondary' : 'border-transparent opacity-50 hover:opacity-100'}`}
               >
                 <img 
-                  src={property.images[item.key as keyof typeof property.images]} 
+                  src={property.images[item.key as keyof typeof property.images] as string} 
                   alt={item.label}
                   className="w-full h-full object-cover"
                 />

@@ -28,8 +28,8 @@ export function StyleCard({ styleData, onHover }: StyleCardProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
       </div>
       
-      <div className="absolute inset-0 p-8 flex flex-col justify-end">
-        <h3 className="text-3xl font-serif text-white mb-2">{styleData.name}</h3>
+      <div className="absolute inset-0 p-4 md:p-8 flex flex-col justify-end">
+        <h3 className="text-xl md:text-3xl font-serif text-white mb-2">{styleData.name}</h3>
         <p className="text-brand-accent/90 text-sm md:text-base mb-4 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
           {styleData.description}
         </p>

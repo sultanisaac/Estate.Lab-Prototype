@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import { Search, Filter, X } from 'lucide-react';
-import { properties } from '../data/properties';
+import { properties as fallbackProperties } from '../data/properties';
 import { styles } from '../data/styles';
 import { PropertyCard } from '../components/ui/PropertyCard';
 import { Button } from '../components/ui/Button';
@@ -17,6 +17,31 @@ export function Properties() {
   const [minBeds, setMinBeds] = useState<number>(0);
   
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [properties, setProperties] = useState(fallbackProperties);
+  useEffect(() => {
+    async function fetchProperties() {
+      try {
+        const res = await fetch('/api/admin/properties');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data)) {
+            setProperties(data);
+            return;
+          }
+        }
+      } catch (err) {
+        console.log('API not found locally. Falling back to localStorage or mock properties.');
+      } 
+      
+      const localData = localStorage.getItem('dev_properties');
+      if (localData) {
+        setProperties(JSON.parse(localData));
+      } else {
+        setProperties(fallbackProperties);
+      }
+    }
+    fetchProperties();
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -24,24 +49,30 @@ export function Properties() {
     if (styleParam) {
       setSelectedStyle(styleParam);
     }
+    
+    const collectionParam = searchParams.get('collection');
+    if (collectionParam) {
+      setSelectedCollection(collectionParam);
+    }
   }, [searchParams]);
 
   // Derived state
   const filteredProperties = properties.filter((property) => {
     // Search Query (name or description)
     const matchesSearch = 
-      property.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      property.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      property.specs.features.some(f => f.toLowerCase().includes(searchQuery.toLowerCase()));
+      property.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      property.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      property.specs?.features?.some((f: string) => f.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      property.keyFeatures?.some((f: string) => f.toLowerCase().includes(searchQuery.toLowerCase()));
 
     // Style
     const matchesStyle = selectedStyle === 'all' || property.style === selectedStyle;
 
     // Collection
-    const matchesCollection = selectedCollection === 'all' || property.collection.toLowerCase() === selectedCollection.toLowerCase();
+    const matchesCollection = selectedCollection === 'all' || property.collection?.toLowerCase() === selectedCollection.toLowerCase();
 
     // Beds
-    const matchesBeds = minBeds === 0 || property.specs.beds >= minBeds;
+    const matchesBeds = minBeds === 0 || (property.specs?.beds >= minBeds);
 
     return matchesSearch && matchesStyle && matchesCollection && matchesBeds;
   });
@@ -173,7 +204,7 @@ export function Properties() {
           </div>
           
           {filteredProperties.length > 0 ? (
-            <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <motion.div layout className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
               <AnimatePresence mode="popLayout">
                 {filteredProperties.map((property) => (
                   <motion.div
