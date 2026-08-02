@@ -17,6 +17,7 @@ export function PropertyDetails() {
           const data = await res.json();
           if (Array.isArray(data)) {
             setProperties(data);
+            setIsLoading(false);
             return;
           }
         }
