@@ -34,15 +34,26 @@ export function PropertiesTab() {
         const res = await fetch('/api/admin/properties');
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
+          if (Array.isArray(data)) {
             setProperties(data);
+            localStorage.setItem('dev_properties', JSON.stringify(data));
+            setLoading(false);
+            return;
           }
         }
       } catch (err) {
-        console.log('Using mock properties data for local development.');
-      } finally {
-        setLoading(false);
+        console.log('API not found locally. Using localStorage / mock properties for local development.');
+      } 
+      
+      const localData = localStorage.getItem('dev_properties');
+      if (localData) {
+        setProperties(JSON.parse(localData));
+      } else {
+        const initialProps = frontendProperties.map(p => ({ ...p, status: 'Available' }));
+        setProperties(initialProps);
+        localStorage.setItem('dev_properties', JSON.stringify(initialProps));
       }
+      setLoading(false);
     }
     fetchProperties();
   }, []);
@@ -113,18 +124,24 @@ export function PropertiesTab() {
       });
       if (!res.ok) throw new Error('API failed');
       
+      let newProps = [];
       if (editingId) {
-        setProperties(properties.map(p => p.id === editingId ? propertyData : p));
+        newProps = properties.map(p => p.id === editingId ? propertyData : p);
       } else {
-        setProperties([propertyData, ...properties]);
+        newProps = [propertyData, ...properties];
       }
+      setProperties(newProps);
+      localStorage.setItem('dev_properties', JSON.stringify(newProps));
     } catch (error) {
-      console.log('API call failed, saving to local state for dev.');
+      console.log('API call failed, saving to localStorage for dev.');
+      let newProps = [];
       if (editingId) {
-        setProperties(properties.map(p => p.id === editingId ? propertyData : p));
+        newProps = properties.map(p => p.id === editingId ? propertyData : p);
       } else {
-        setProperties([propertyData, ...properties]);
+        newProps = [propertyData, ...properties];
       }
+      setProperties(newProps);
+      localStorage.setItem('dev_properties', JSON.stringify(newProps));
     }
     
     closeAndResetModal();
@@ -172,11 +189,15 @@ export function PropertiesTab() {
       });
       if (!res.ok) throw new Error('API failed');
       
-      setProperties(properties.filter(p => !ids.includes(p.id)));
+      const newProps = properties.filter(p => !ids.includes(p.id));
+      setProperties(newProps);
+      localStorage.setItem('dev_properties', JSON.stringify(newProps));
       setSelectedProperties([]);
     } catch (error) {
-      console.log('API call failed, removing from local state for dev.');
-      setProperties(properties.filter(p => !ids.includes(p.id)));
+      console.log('API call failed, removing from localStorage for dev.');
+      const newProps = properties.filter(p => !ids.includes(p.id));
+      setProperties(newProps);
+      localStorage.setItem('dev_properties', JSON.stringify(newProps));
       setSelectedProperties([]);
     }
   };

@@ -1,11 +1,45 @@
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { properties } from '../data/properties';
+import { properties as fallbackProperties } from '../data/properties';
 import { Bed, Bath, ArrowLeft, MapPin, CheckCircle } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 
 export function PropertyDetails() {
   const { id } = useParams<{ id: string }>();
-  const property = properties.find(p => p.id === id);
+  const [properties, setProperties] = useState(fallbackProperties);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProperties() {
+      try {
+        const res = await fetch('/api/admin/properties');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data)) {
+            setProperties(data);
+            return;
+          }
+        }
+      } catch (err) {
+        console.log('API not found locally. Falling back to localStorage or mock properties.');
+      } 
+      
+      const localData = localStorage.getItem('dev_properties');
+      if (localData) {
+        setProperties(JSON.parse(localData));
+      } else {
+        setProperties(fallbackProperties);
+      }
+      setIsLoading(false);
+    }
+    fetchProperties();
+  }, []);
+
+  const property = properties.find((p: any) => p.id === id);
+
+  if (isLoading) {
+    return <div className="min-h-[60vh] flex items-center justify-center">Loading...</div>;
+  }
 
   if (!property) {
     return (
@@ -19,12 +53,12 @@ export function PropertyDetails() {
   }
 
   const galleryImages = [
-    { src: property.images.livingRoom, label: 'Living Room' },
-    { src: property.images.kitchen, label: 'Kitchen' },
-    { src: property.images.masterBed, label: 'Master Bedroom' },
-    { src: property.images.bath, label: 'Bathroom' },
-    { src: property.images.outdoor, label: 'Outdoor' },
-  ];
+    { src: property.images?.livingRoom || property.images?.gallery?.[0], label: 'Living Room / Gallery 1' },
+    { src: property.images?.kitchen || property.images?.gallery?.[1], label: 'Kitchen / Gallery 2' },
+    { src: property.images?.masterBed || property.images?.gallery?.[2], label: 'Master Bedroom / Gallery 3' },
+    { src: property.images?.bath || property.images?.gallery?.[3], label: 'Bathroom / Gallery 4' },
+    { src: property.images?.outdoor || property.images?.gallery?.[4], label: 'Outdoor / Gallery 5' },
+  ].filter(img => img.src); // Only show available images
 
   return (
     <div className="font-sans bg-brand-background min-h-screen pb-24">
@@ -50,10 +84,10 @@ export function PropertyDetails() {
             </div>
             <h1 className="text-5xl md:text-7xl font-serif font-bold mb-4 drop-shadow-md">{property.name}</h1>
             <div className="flex flex-wrap items-center gap-6 text-lg md:text-xl text-white/90">
-              <span className="flex items-center"><MapPin className="w-5 h-5 mr-2" /> Prime Location</span>
-              <span className="flex items-center"><Bed className="w-5 h-5 mr-2" /> {property.specs.beds} Beds</span>
-              <span className="flex items-center"><Bath className="w-5 h-5 mr-2" /> {property.specs.baths} Baths</span>
-              <span className="font-medium bg-white/20 px-3 py-1 rounded-md backdrop-blur-sm">{property.specs.area}</span>
+              <span className="flex items-center"><MapPin className="w-5 h-5 mr-2" /> {property.location || 'Prime Location'}</span>
+              <span className="flex items-center"><Bed className="w-5 h-5 mr-2" /> {property.specs?.beds || 0} Beds</span>
+              <span className="flex items-center"><Bath className="w-5 h-5 mr-2" /> {property.specs?.baths || 0} Baths</span>
+              <span className="font-medium bg-white/20 px-3 py-1 rounded-md backdrop-blur-sm">{property.specs?.area || ''}</span>
             </div>
           </div>
         </div>
@@ -69,15 +103,15 @@ export function PropertyDetails() {
             </section>
 
             <section>
-              <h2 className="text-3xl font-serif text-brand-primary mb-6">Key Features</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {property.specs.features.map((feature, idx) => (
-                  <div key={idx} className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-brand-accent/20">
-                    <CheckCircle className="w-6 h-6 text-brand-secondary flex-shrink-0" />
-                    <span className="text-brand-text font-medium">{feature}</span>
-                  </div>
+              <h2 className="text-2xl font-serif text-brand-primary mb-6">Key Features</h2>
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {(property.keyFeatures || property.specs?.features || []).map((feature: string, idx: number) => (
+                  <li key={idx} className="flex items-start">
+                    <CheckCircle className="w-5 h-5 text-brand-secondary mr-3 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 leading-relaxed">{feature}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </section>
             
             <section>
@@ -107,13 +141,16 @@ export function PropertyDetails() {
                   <span className="text-brand-text/70">Collection</span>
                   <span className="font-medium text-brand-primary">{property.collection}</span>
                 </div>
-                <div className="flex justify-between items-center py-3 border-b border-brand-accent/20">
-                  <span className="text-brand-text/70">Est. Build Time</span>
-                  <span className="font-medium text-brand-primary">4-6 Months</span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div className="bg-white p-4 rounded-xl shadow-sm border border-brand-accent/50 text-center hover:border-brand-primary transition-colors">
+                  <div className="text-gray-500 text-sm mb-1">Build Time</div>
+                  <div className="font-bold text-brand-primary">{property.buildTime || '4-6 Months'}</div>
                 </div>
-                <div className="flex justify-between items-center py-3 border-b border-brand-accent/20">
-                  <span className="text-brand-text/70">Customization</span>
-                  <span className="font-medium text-brand-primary">Available</span>
+                <div className="bg-white p-4 rounded-xl shadow-sm border border-brand-accent/50 text-center hover:border-brand-primary transition-colors">
+                  <div className="text-gray-500 text-sm mb-1">Customization</div>
+                  <div className="font-bold text-brand-primary">{property.customization || 'Available'}</div>
                 </div>
               </div>
 
