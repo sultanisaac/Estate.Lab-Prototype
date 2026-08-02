@@ -17,7 +17,8 @@ export function Properties() {
   const [minBeds, setMinBeds] = useState<number>(0);
   
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [properties, setProperties] = useState(fallbackProperties);
+  const [properties, setProperties] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     async function fetchProperties() {
       try {
@@ -25,7 +26,8 @@ export function Properties() {
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data)) {
-            setProperties(data);
+            setProperties(data.reverse()); // Reverse to show oldest first, matching initial layout
+            setIsLoading(false);
             return;
           }
         }
@@ -39,6 +41,7 @@ export function Properties() {
       } else {
         setProperties(fallbackProperties);
       }
+      setIsLoading(false);
     }
     fetchProperties();
   }, []);
@@ -199,11 +202,24 @@ export function Properties() {
         <div>
           <div className="flex justify-between items-end mb-6">
             <h2 className="text-2xl font-serif text-brand-primary">
-              {filteredProperties.length} {filteredProperties.length === 1 ? 'Property' : 'Properties'} Found
+              {isLoading ? 'Loading Properties...' : `${filteredProperties.length} ${filteredProperties.length === 1 ? 'Property' : 'Properties'} Found`}
             </h2>
           </div>
           
-          {filteredProperties.length > 0 ? (
+          {isLoading ? (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+                <div key={i} className="animate-pulse bg-white rounded-3xl h-[400px] border border-gray-100">
+                  <div className="h-64 bg-gray-200 rounded-t-3xl"></div>
+                  <div className="p-6 space-y-4">
+                    <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                    <div className="h-6 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredProperties.length > 0 ? (
             <motion.div layout className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
               <AnimatePresence mode="popLayout">
                 {filteredProperties.map((property) => (
