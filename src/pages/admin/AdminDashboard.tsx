@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LayoutDashboard, CalendarDays, Home, Users, LogOut, Menu, X, ClipboardList } from 'lucide-react';
+import { LayoutDashboard, CalendarDays, Home, Users, LogOut, Menu, X, ClipboardList, Globe } from 'lucide-react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { OverviewTab } from './tabs/OverviewTab';
 import { BookingsTab } from './tabs/BookingsTab';
@@ -77,7 +77,14 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
           })}
         </nav>
 
-        <div className="p-4 border-t border-white/10">
+        <div className="p-4 border-t border-white/10 space-y-2">
+          <button
+            onClick={() => window.open('/', '_blank')}
+            className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-white/10 transition-colors text-white/80 hover:text-white"
+          >
+            <Globe size={20} />
+            <span>View Website</span>
+          </button>
           <button
             onClick={onLogout}
             className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-white/10 transition-colors text-red-300 hover:text-red-400"
