@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { format, startOfWeek, addDays, isSameDay, parseISO, startOfMonth, endOfMonth, endOfWeek, addMonths } from "date-fns";
-import { ChevronLeft, ChevronRight, Filter, Calendar as CalendarIcon, Phone, MapPin } from "lucide-react";
+import { ChevronLeft, ChevronRight, Filter, Calendar as CalendarIcon, Phone, MapPin, X, Mail, Home, Info, Clock } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -12,6 +12,7 @@ import { mockBookings } from "../../../data/mockAdminData";
 
 export function CalendarTab() {
   const [bookings, setBookings] = useState<any[]>(mockBookings);
+  const [selectedBooking, setSelectedBooking] = useState<any>(null);
   const [currentDate, setCurrentDate] = useState(new Date("2026-10-24")); // Reference date matching mock data
   const [viewMode, setViewMode] = useState<"daily" | "weekly" | "monthly">("weekly");
   const [filterMode, setFilterMode] = useState<"all" | "Pending" | "Contacted" | "Closed">("all");
@@ -270,10 +271,11 @@ export function CalendarTab() {
                     if (cellBookings.length === 0) return null;
                     
                     return cellBookings.map(booking => (
-                      <div
+                      <button
                         key={booking.id}
+                        onClick={() => setSelectedBooking(booking)}
                         className={cn(
-                          "w-full text-left p-4 md:p-5 rounded-2xl transition-all shadow-sm flex items-start gap-4 md:gap-5 border",
+                          "w-full text-left p-4 md:p-5 rounded-2xl transition-all shadow-sm flex items-start gap-4 md:gap-5 border cursor-pointer hover:-translate-y-0.5 hover:shadow-md",
                           booking.status === "Pending" ? "bg-yellow-50/50 border-yellow-200" :
                           booking.status === "Contacted" ? "bg-blue-50/50 border-blue-200" :
                           "bg-green-50/50 border-green-200"
@@ -321,7 +323,7 @@ export function CalendarTab() {
                             </p>
                           )}
                         </div>
-                      </div>
+                      </button>
                     ));
                   })}
                   
@@ -369,10 +371,11 @@ export function CalendarTab() {
                       return (
                         <div key={j} className="border-r border-gray-100 relative min-h-[80px] p-1.5 transition-colors group-hover:bg-gray-50/50">
                           {cellBookings.map((booking) => (
-                            <div
+                            <button
                               key={booking.id}
+                              onClick={() => setSelectedBooking(booking)}
                               className={cn(
-                                "w-full text-left p-2.5 rounded-md mb-1.5 transition-all hover:scale-[1.02] hover:-translate-y-0.5 hover:shadow-md cursor-default",
+                                "w-full text-left p-2.5 rounded-md mb-1.5 transition-all hover:scale-[1.02] hover:-translate-y-0.5 hover:shadow-md cursor-pointer",
                                 booking.status === "Pending" ? "bg-yellow-50 border border-yellow-200" :
                                 booking.status === "Contacted" ? "bg-blue-50 border border-blue-200" :
                                 "bg-green-50 border border-green-200"
@@ -387,7 +390,7 @@ export function CalendarTab() {
                                 {booking.time} - {booking.name}
                               </p>
                               <p className="text-[10px] text-gray-600 truncate mt-0.5">{booking.property}</p>
-                            </div>
+                            </button>
                           ))}
                         </div>
                       );
@@ -433,17 +436,18 @@ export function CalendarTab() {
                       
                       <div className="space-y-1 mt-1 overflow-y-auto max-h-[80px]">
                         {dayBookings.map(booking => (
-                          <div
+                          <button
                             key={booking.id}
+                            onClick={() => setSelectedBooking(booking)}
                             className={cn(
-                              "w-full text-left px-2 py-1 rounded text-[10px] font-medium truncate transition-all hover:scale-[1.02] cursor-default",
+                              "w-full text-left px-2 py-1 rounded text-[10px] font-medium truncate transition-all hover:scale-[1.02] cursor-pointer",
                               booking.status === "Pending" ? "bg-yellow-100 text-yellow-800" :
                               booking.status === "Contacted" ? "bg-blue-100 text-blue-800" :
                               "bg-green-100 text-green-800"
                             )}
                           >
                             {booking.time} {booking.name}
-                          </div>
+                          </button>
                         ))}
                       </div>
                     </div>
@@ -454,6 +458,97 @@ export function CalendarTab() {
           )}
         </div>
       </div>
+
+      {/* Booking Details Modal */}
+      {selectedBooking && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+          onClick={() => setSelectedBooking(null)}
+        >
+          <div 
+            className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center p-6 border-b border-gray-100">
+              <h3 className="text-xl font-serif text-[#0F4C5C]">Client Information</h3>
+              <button 
+                onClick={() => setSelectedBooking(null)}
+                className="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-50 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              <div className="flex items-center space-x-4">
+                <div className="h-16 w-16 bg-[#0F4C5C]/10 rounded-full flex items-center justify-center text-[#0F4C5C] text-2xl font-serif font-bold">
+                  {selectedBooking.name.charAt(0)}
+                </div>
+                <div>
+                  <h4 className="text-lg font-medium text-gray-900">{selectedBooking.name}</h4>
+                  <span className={`inline-block mt-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                    selectedBooking.status === 'Pending' ? 'bg-yellow-100 text-yellow-700' :
+                    selectedBooking.status === 'Contacted' ? 'bg-blue-100 text-blue-700' :
+                    'bg-green-100 text-green-700'
+                  }`}>
+                    {selectedBooking.status}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 space-y-3">
+                  <h5 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Contact Info</h5>
+                  <div className="flex items-center text-sm text-gray-700">
+                    <Mail className="w-4 h-4 mr-3 text-gray-400" />
+                    <a href={`mailto:${selectedBooking.email}`} className="hover:text-[#0F4C5C] hover:underline">{selectedBooking.email}</a>
+                  </div>
+                  <div className="flex items-center text-sm text-gray-700">
+                    <Phone className="w-4 h-4 mr-3 text-gray-400" />
+                    <a href={`tel:${selectedBooking.phone}`} className="hover:text-[#0F4C5C] hover:underline">{selectedBooking.phone}</a>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 space-y-3">
+                  <h5 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Inquiry Details</h5>
+                  <div className="flex items-center text-sm text-gray-700">
+                    <Home className="w-4 h-4 mr-3 text-gray-400" />
+                    <span className="font-medium">{selectedBooking.property}</span>
+                  </div>
+                  <div className="flex items-center text-sm text-gray-700">
+                    <CalendarIcon className="w-4 h-4 mr-3 text-gray-400" />
+                    <span>{selectedBooking.date} at {selectedBooking.time}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-[#0F4C5C]/5 p-4 rounded-xl border border-[#0F4C5C]/10 flex items-start">
+                <Info className="w-5 h-5 text-[#0F4C5C] mr-3 mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-gray-700">
+                  Request submitted <span className="font-medium">{selectedBooking.createdAt}</span>. 
+                  Reach out to the client via email or phone to confirm their consultation.
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end space-x-3">
+              <button 
+                onClick={() => setSelectedBooking(null)}
+                className="px-4 py-2 border border-gray-200 text-gray-600 rounded-xl hover:bg-gray-100 transition-colors"
+              >
+                Close
+              </button>
+              <a 
+                href={`mailto:${selectedBooking.email}?subject=Consultation Regarding ${selectedBooking.property}`}
+                className="px-4 py-2 bg-[#0F4C5C] text-white rounded-xl hover:bg-[#0F4C5C]/90 transition-colors flex items-center"
+              >
+                <Mail className="w-4 h-4 mr-2" />
+                Contact Client
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
