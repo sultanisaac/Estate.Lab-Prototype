@@ -156,7 +156,8 @@ export function PropertiesTab() {
       specs: {
         area: newProperty.specs.area,
         beds: parseInt(newProperty.specs.beds as any) || 0,
-        baths: parseInt(newProperty.specs.baths as any) || 0
+        baths: parseInt(newProperty.specs.baths as any) || 0,
+        features: newProperty.specs.features.split(',').map(f => f.trim()).filter(Boolean)
       },
       keyFeatures: newProperty.specs.features.split(',').map(f => f.trim()).filter(Boolean),
       images: {
@@ -211,7 +212,7 @@ export function PropertiesTab() {
         area: property.specs?.area || '',
         beds: property.specs?.beds || 1,
         baths: property.specs?.baths || 1,
-        features: property.keyFeatures?.join(', ') || ''
+        features: property.specs?.features?.join(', ') || property.keyFeatures?.join(', ') || ''
       },
       images: {
         exterior: property.images?.exterior || property.image || '',
