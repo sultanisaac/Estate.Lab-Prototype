@@ -15,7 +15,6 @@ const imageLabels = [
   { key: 'kitchen', label: 'Kitchen & Dining' },
   { key: 'masterBed', label: 'Master Bedroom' },
   { key: 'bath', label: 'Bathroom / Toilet' },
-  { key: 'multifunction', label: 'Secondary Room' },
   { key: 'outdoor', label: 'Outdoor / Garden' },
 ];
 
@@ -27,8 +26,8 @@ export function ImageGallery({ property, isOpen, onClose }: ImageGalleryProps) {
     
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowRight') setCurrentIndex((prev) => (prev + 1) % 7);
-      if (e.key === 'ArrowLeft') setCurrentIndex((prev) => (prev - 1 + 7) % 7);
+      if (e.key === 'ArrowRight') setCurrentIndex((prev) => (prev + 1) % 6);
+      if (e.key === 'ArrowLeft') setCurrentIndex((prev) => (prev - 1 + 6) % 6);
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -37,8 +36,8 @@ export function ImageGallery({ property, isOpen, onClose }: ImageGalleryProps) {
 
   if (!isOpen) return null;
 
-  const nextImage = () => setCurrentIndex((prev) => (prev + 1) % 7);
-  const prevImage = () => setCurrentIndex((prev) => (prev - 1 + 7) % 7);
+  const nextImage = () => setCurrentIndex((prev) => (prev + 1) % 6);
+  const prevImage = () => setCurrentIndex((prev) => (prev - 1 + 6) % 6);
   
   const currentKey = imageLabels[currentIndex].key as keyof typeof property.images;
   const currentImage = property.images[currentKey];
