@@ -75,8 +75,8 @@ export function PropertiesTab() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             id: `p-${Date.now()}-${Math.random()}`,
-            name: prop.name || prop.title,
-            title: prop.name || prop.title,
+            name: prop.name || (prop as any).title,
+            title: prop.name || (prop as any).title,
             collection: prop.collection || 'Starter',
             status: 'Available',
             style: prop.style || 'minimalis',
@@ -87,7 +87,7 @@ export function PropertiesTab() {
             specs: prop.specs || { area: '', beds: 1, baths: 1 },
             keyFeatures: prop.keyFeatures || [],
             images: {
-              exterior: prop.image || '',
+              exterior: prop.images?.exterior || (prop as any).image || '',
               gallery: []
             }
           })
