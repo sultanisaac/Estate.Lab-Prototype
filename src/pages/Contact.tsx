@@ -33,14 +33,14 @@ export function Contact() {
   )}`;
 
   return (
-    <div className="pt-24 pb-20 min-h-screen bg-[#FDFCF7]">
+    <div className="pt-24 pb-20 min-h-screen bg-brand-background">
       {/* Hero Header */}
       <section className="container mx-auto px-4 md:px-8 pt-10 mb-16">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#D4B483]/20 text-[#856937] text-xs font-semibold mb-4"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-secondary/20 text-brand-primary text-xs font-semibold mb-4 border border-brand-secondary/30"
           >
             <span>Direct Client Access</span>
           </motion.div>
@@ -72,18 +72,18 @@ export function Contact() {
           {/* Left Column: Direct Contact Info & WhatsApp */}
           <div className="lg:col-span-5 space-y-8">
             {/* Quick WhatsApp Card */}
-            <div className="bg-[#0F4C5C] text-white p-8 rounded-3xl shadow-xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-48 h-48 bg-[#D4B483]/10 rounded-full blur-2xl"></div>
+            <div className="bg-brand-primary text-white p-8 rounded-3xl shadow-xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-brand-secondary/15 rounded-full blur-2xl"></div>
               
               <div className="flex items-center gap-4 mb-6">
                 <img
                   src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200"
                   alt="Sultan Isaac"
-                  className="w-16 h-16 rounded-2xl object-cover border-2 border-[#D4B483]"
+                  className="w-16 h-16 rounded-2xl object-cover border-2 border-brand-secondary"
                 />
                 <div>
                   <h3 className="font-serif text-xl font-bold text-white">Sultan Isaac</h3>
-                  <p className="text-xs text-[#D4B483] uppercase tracking-wider font-semibold">Private Broker</p>
+                  <p className="text-xs text-brand-secondary uppercase tracking-wider font-semibold">Private Broker</p>
                   <p className="text-xs text-white/70 mt-0.5">Average reply time: &lt; 15 mins</p>
                 </div>
               </div>
@@ -104,7 +104,7 @@ export function Contact() {
             </div>
 
             {/* Direct Channels Card */}
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6">
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-brand-accent/50 space-y-6">
               <h4 className="font-serif text-xl font-bold text-brand-primary">Direct Channels</h4>
               
               <div className="space-y-4">
@@ -157,8 +157,8 @@ export function Contact() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-gray-100 flex items-center gap-3 text-xs text-gray-500">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+              <div className="pt-4 border-t border-brand-accent/40 flex items-center gap-3 text-xs text-brand-text/70">
+                <ShieldCheck className="w-4 h-4 text-brand-primary shrink-0" />
                 <span>All discussions and property inquiries are protected under non-disclosure confidentiality.</span>
               </div>
             </div>
@@ -166,7 +166,7 @@ export function Contact() {
 
           {/* Right Column: Private Consultation Form */}
           <div className="lg:col-span-7">
-            <div className="bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-gray-100">
+            <div className="bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-brand-accent/50">
               <h3 className="font-serif text-2xl sm:text-3xl font-bold text-brand-primary mb-2">
                 Request a Private Consultation
               </h3>
@@ -176,8 +176,8 @@ export function Contact() {
 
               {submitted ? (
                 <div className="text-center py-12 space-y-4">
-                  <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
-                    <CheckCircle2 className="w-9 h-9" />
+                  <div className="w-16 h-16 bg-brand-secondary/20 text-brand-primary border border-brand-secondary/30 rounded-full flex items-center justify-center mx-auto shadow-sm">
+                    <CheckCircle2 className="w-8 h-8 text-brand-primary" />
                   </div>
                   <h4 className="font-serif text-2xl font-bold text-brand-primary">Consultation Request Received</h4>
                   <p className="text-brand-text/70 max-w-md mx-auto text-sm leading-relaxed">
@@ -197,7 +197,7 @@ export function Contact() {
                         message: ''
                       });
                     }}
-                    className="mt-4 rounded-xl"
+                    className="mt-4 rounded-xl border-brand-primary text-brand-primary hover:bg-brand-primary/5"
                   >
                     Submit Another Inquiry
                   </Button>
@@ -215,7 +215,7 @@ export function Contact() {
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="e.g. Jonathan Pratama"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary text-sm"
+                        className="w-full px-4 py-3 rounded-xl border border-brand-accent focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 text-sm bg-white transition-colors"
                       />
                     </div>
 
@@ -229,7 +229,7 @@ export function Contact() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="e.g. jonathan@example.com"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary text-sm"
+                        className="w-full px-4 py-3 rounded-xl border border-brand-accent focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 text-sm bg-white transition-colors"
                       />
                     </div>
                   </div>
@@ -245,7 +245,7 @@ export function Contact() {
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         placeholder="e.g. +62 812 3456 7890"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary text-sm"
+                        className="w-full px-4 py-3 rounded-xl border border-brand-accent focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 text-sm bg-white transition-colors"
                       />
                     </div>
 
@@ -256,7 +256,7 @@ export function Contact() {
                       <select
                         value={formData.consultationType}
                         onChange={(e) => setFormData({ ...formData, consultationType: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary text-sm bg-white"
+                        className="w-full px-4 py-3 rounded-xl border border-brand-accent focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 text-sm bg-white transition-colors"
                       >
                         <option value="buying">Acquiring a Curated Home</option>
                         <option value="offmarket">Private Off-Market Inquiries</option>
@@ -274,7 +274,7 @@ export function Contact() {
                       <select
                         value={formData.meetingFormat}
                         onChange={(e) => setFormData({ ...formData, meetingFormat: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary text-sm bg-white"
+                        className="w-full px-4 py-3 rounded-xl border border-brand-accent focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 text-sm bg-white transition-colors"
                       >
                         <option value="in-person">Private Lounge Meeting (Sudirman)</option>
                         <option value="virtual">Virtual Video Call (Zoom / Google Meet)</option>
@@ -291,7 +291,7 @@ export function Contact() {
                         value={formData.preferredTime}
                         onChange={(e) => setFormData({ ...formData, preferredTime: e.target.value })}
                         placeholder="e.g. Tuesday morning, next week"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary text-sm"
+                        className="w-full px-4 py-3 rounded-xl border border-brand-accent focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 text-sm bg-white transition-colors"
                       />
                     </div>
                   </div>
@@ -305,7 +305,7 @@ export function Contact() {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Share any preferences regarding budget, style (Tropical, Minimalist, Scandinavian, Industrial), or target location..."
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary text-sm"
+                      className="w-full px-4 py-3 rounded-xl border border-brand-accent focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 text-sm bg-white transition-colors"
                     />
                   </div>
 
@@ -314,7 +314,7 @@ export function Contact() {
                     variant="primary"
                     size="lg"
                     disabled={loading}
-                    className="w-full rounded-xl py-3.5 flex items-center justify-center gap-2 text-base font-semibold"
+                    className="w-full rounded-xl py-3.5 flex items-center justify-center gap-2 text-base font-semibold shadow-md hover:shadow-lg"
                   >
                     {loading ? (
                       <span>Submitting Request...</span>
@@ -333,12 +333,12 @@ export function Contact() {
         </div>
 
         {/* Map Embed Section */}
-        <div className="mt-16 bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+        <div className="mt-16 bg-white p-6 rounded-3xl shadow-sm border border-brand-accent/50">
           <div className="mb-4">
             <h4 className="font-serif text-lg font-bold text-brand-primary">Advisory Lounge Location</h4>
             <p className="text-xs text-brand-text/60">Jl. Sudirman No. 45, Jakarta Selatan (By appointment)</p>
           </div>
-          <div className="h-[340px] rounded-2xl overflow-hidden shadow-inner bg-gray-100">
+          <div className="h-[340px] rounded-2xl overflow-hidden shadow-inner bg-brand-background border border-brand-accent/30">
             <iframe
               title="Sultan Isaac Advisory Office"
               src="https://www.google.com/maps?q=Jl.+Sudirman+No.+45,+Jakarta+Selatan,+DKI+Jakarta+12190&output=embed"

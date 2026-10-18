@@ -421,8 +421,8 @@ export function PropertyFormPage() {
             <h1 className="text-2xl md:text-3xl font-serif font-bold text-[#0F4C5C] flex items-center gap-3">
               {isEditing ? (formData.name || 'Edit Property') : 'Add New Property'}
               {formData.isCurated && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-sans font-semibold rounded-full bg-[#D4B483]/20 text-[#856937] border border-[#D4B483]/40">
-                  <Star size={12} className="fill-[#D4B483] text-[#D4B483]" />
+                <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-sans font-semibold rounded-full bg-brand-secondary/20 text-brand-primary border border-brand-secondary/30">
+                  <Star size={12} className="fill-brand-secondary text-brand-secondary" />
                   Curated Collection
                 </span>
               )}
@@ -795,7 +795,7 @@ export function PropertyFormPage() {
                 <h2 className="text-xl font-serif font-bold text-[#0F4C5C]">
                   Property Media Gallery
                 </h2>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#D4B483]/20 text-[#856937] border border-[#D4B483]/40">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-secondary/20 text-brand-primary border border-brand-secondary/30">
                   Strict 16:9 Landscape
                 </span>
               </div>

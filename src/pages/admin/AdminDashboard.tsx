@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { LayoutDashboard, CalendarDays, Home, Users, LogOut, Menu, X, ClipboardList, Globe } from 'lucide-react';
+import { LayoutDashboard, CalendarDays, Home, Users, LogOut, Menu, X, ClipboardList, Globe, LayoutTemplate } from 'lucide-react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { OverviewTab } from './tabs/OverviewTab';
 import { BookingsTab } from './tabs/BookingsTab';
 import { CalendarTab } from './tabs/CalendarTab';
 import { PropertiesTab } from './tabs/PropertiesTab';
 import { NewsletterTab } from './tabs/NewsletterTab';
+import { WebsiteTab } from './tabs/WebsiteTab';
 import { PropertyFormPage } from './PropertyFormPage';
 
 interface AdminDashboardProps {
@@ -22,6 +23,7 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
     { id: 'bookings', path: '/admin/bookings', label: 'Bookings List', icon: ClipboardList },
     { id: 'calendar', path: '/admin/calendar', label: 'Calendar', icon: CalendarDays },
     { id: 'properties', path: '/admin/properties', label: 'Properties', icon: Home },
+    { id: 'website', path: '/admin/website', label: 'Website Content', icon: LayoutTemplate },
     { id: 'newsletter', path: '/admin/newsletter', label: 'Newsletter', icon: Users },
   ];
 
@@ -106,6 +108,7 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
             <Route path="properties" element={<PropertiesTab />} />
             <Route path="properties/new" element={<PropertyFormPage />} />
             <Route path="properties/edit/:id" element={<PropertyFormPage />} />
+            <Route path="website" element={<WebsiteTab />} />
             <Route path="newsletter" element={<NewsletterTab />} />
           </Routes>
         </div>

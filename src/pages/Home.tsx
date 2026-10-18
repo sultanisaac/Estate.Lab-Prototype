@@ -7,6 +7,7 @@ import { PropertyCard } from '../components/ui/PropertyCard';
 import { StyleCard } from '../components/ui/StyleCard';
 import { properties } from '../data/properties';
 import { styles } from '../data/styles';
+import { getWebsiteContent, type Testimonial, type AboutMeData } from '../data/websiteContent';
 
 export function Home() {
   const navigate = useNavigate();
@@ -79,80 +80,18 @@ export function Home() {
   const curatedList = allProperties.filter(p => p.isCurated === true);
   const curatedProperties = curatedList.length > 0 ? curatedList : allProperties.slice(0, 8);
 
-  const testimonials = [
-    {
-      id: 1,
-      name: 'Andi & Sarah',
-      role: 'Type 60 Owners, Jakarta',
-      rating: 5,
-      text: "Found the perfect Tropical Modern home within our budget. The Type 60's cross-ventilation keeps it cool all day!",
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150'
-    },
-    {
-      id: 2,
-      name: 'Michelle T.',
-      role: 'Type 45 Owner, Bandung',
-      rating: 5,
-      text: "Amazing transparency and the legal team handled everything. Our Type 45 feels incredibly spacious and bright.",
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150'
-    },
-    {
-      id: 3,
-      name: 'Budi & Clara',
-      role: 'Type 50 Owners, Surabaya',
-      rating: 5,
-      text: "Estate.Lab made buying our first home easy. The Industrial unit is stunning and smart features are a game changer!",
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150'
-    },
-    {
-      id: 4,
-      name: 'Diana R.',
-      role: 'Type 90 Owner, Bali',
-      rating: 5,
-      text: "Upgraded to the Minimalist Collection. The architecture maximizes light beautifully—they truly understand modern living.",
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150'
-    },
-    {
-      id: 5,
-      name: 'Reza Pratama',
-      role: 'Type 21 Owner, South Jakarta',
-      rating: 5,
-      text: "As a young tech professional, Type 21 is the ultimate studio. Compact, high ceilings, and zero wasted square meters.",
-      avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=150'
-    },
-    {
-      id: 6,
-      name: 'Hendro & Maya',
-      role: 'Type 72 Owners, Tangerang',
-      rating: 5,
-      text: "The indoor garden and double-height ceiling make our family gatherings feel like a luxury resort stay.",
-      avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=150'
-    },
-    {
-      id: 7,
-      name: 'Clarissa W.',
-      role: 'Type 36 Owner, Yogyakarta',
-      rating: 5,
-      text: "From 3D blueprint walkthroughs to key handover, everything was delivered exactly on schedule with immaculate finishing.",
-      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=150'
-    },
-    {
-      id: 8,
-      name: 'Kevin S.',
-      role: 'Type 80 Owner, Medan',
-      rating: 5,
-      text: "The raw brick and black steel industrial aesthetics get compliments from every guest. Truly standout architecture.",
-      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=150'
-    },
-    {
-      id: 9,
-      name: 'dr. Farhan & Aisyah',
-      role: 'Type 85 Owners, Semarang',
-      rating: 5,
-      text: "We opted for the custom pool layout. The seamless indoor-outdoor transition gives us a sanctuary after long hospital shifts.",
-      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150'
-    }
-  ];
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(() => getWebsiteContent().testimonials);
+  const [aboutMe, setAboutMe] = useState<AboutMeData>(() => getWebsiteContent().aboutMe);
+
+  useEffect(() => {
+    const handleWebsiteContentUpdated = () => {
+      const fresh = getWebsiteContent();
+      setTestimonials(fresh.testimonials);
+      setAboutMe(fresh.aboutMe);
+    };
+    window.addEventListener('website_content_updated', handleWebsiteContentUpdated);
+    return () => window.removeEventListener('website_content_updated', handleWebsiteContentUpdated);
+  }, []);
 
   // Auto-scroll logic for The Curated Collections
   const curatedSectionRef = useRef<HTMLElement>(null);
@@ -367,7 +306,7 @@ export function Home() {
       </section>
 
       {/* Meet Your Advisor Section */}
-      <section className="py-20 sm:py-24 bg-[#FDFCF7] border-b border-gray-100">
+      <section className="py-20 sm:py-24 bg-brand-background border-b border-brand-accent/50">
         <div className="container mx-auto px-4 md:px-8 max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             
@@ -382,23 +321,23 @@ export function Home() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                   <div className="absolute bottom-6 left-6 right-6 text-white">
-                    <span className="text-[11px] uppercase tracking-widest text-[#D4B483] font-semibold">Principal Broker</span>
-                    <h4 className="text-2xl font-serif font-bold">Sultan Isaac</h4>
+                    <span className="text-[11px] uppercase tracking-widest text-brand-secondary font-semibold">Principal Broker</span>
+                    <h4 className="text-2xl font-serif font-bold text-white">Sultan Isaac</h4>
                     <p className="text-xs text-white/80">Estate.Lab Private Advisory</p>
                   </div>
                 </div>
 
-                <div className="absolute -bottom-5 -right-4 sm:-right-6 bg-white p-4 sm:p-5 rounded-2xl shadow-xl border border-gray-100 max-w-[200px]">
-                  <p className="text-[11px] uppercase tracking-wider text-[#856937] font-bold">Direct Access</p>
-                  <p className="text-xs text-gray-700 font-medium mt-1">One client at a time, dedicated representation.</p>
+                <div className="absolute -bottom-5 -right-4 sm:-right-6 bg-white p-4 sm:p-5 rounded-2xl shadow-xl border border-brand-accent/50 max-w-[200px]">
+                  <p className="text-[11px] uppercase tracking-wider text-brand-primary font-bold">Direct Access</p>
+                  <p className="text-xs text-brand-text/70 font-medium mt-1">One client at a time, dedicated representation.</p>
                 </div>
               </div>
             </div>
 
             {/* Advisor Text Column */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#D4B483]/20 text-[#856937] text-xs font-semibold">
-                <Sparkles size={13} className="text-[#856937]" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-secondary/20 text-brand-primary text-xs font-semibold border border-brand-secondary/30">
+                <Sparkles size={13} className="text-brand-secondary" />
                 <span>Meet Your Personal Advisor</span>
               </div>
 
@@ -430,7 +369,7 @@ export function Home() {
                     navigate('/contact');
                     window.scrollTo(0, 0);
                   }}
-                  className="px-6 py-3.5 bg-white hover:bg-gray-50 border border-gray-200 text-brand-primary rounded-xl font-semibold text-sm transition-all"
+                  className="px-6 py-3.5 bg-white hover:bg-gray-50 border border-brand-accent/60 text-brand-primary rounded-xl font-semibold text-sm transition-all"
                 >
                   Schedule Private Consultation
                 </button>
@@ -450,8 +389,8 @@ export function Home() {
         <div className="container mx-auto px-4 md:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4B483]/20 text-[#856937] text-xs font-semibold mb-3">
-                <Star size={12} className="fill-[#D4B483] text-[#D4B483]" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-secondary/20 text-brand-primary text-xs font-semibold mb-3 border border-brand-secondary/30">
+                <Star size={12} className="fill-brand-secondary text-brand-secondary" />
                 <span>Broker's Handpicked Portfolio</span>
               </div>
               <h2 className="text-4xl md:text-5xl font-serif text-brand-primary font-bold">The Curated Collections</h2>
@@ -553,10 +492,10 @@ export function Home() {
       <section id="about" className="py-24 bg-white">
         <div className="container mx-auto px-4 md:px-8">
           <div className="text-center mb-16 max-w-3xl mx-auto">
-            <span className="text-xs uppercase tracking-widest text-[#856937] font-semibold mb-2 block">
+            <span className="text-xs uppercase tracking-widest text-brand-secondary font-bold mb-2 block">
               Bespoke Representation
             </span>
-            <h2 className="text-4xl md:text-5xl font-serif text-brand-primary font-bold mb-4">Why Work With Sultan Isaac?</h2>
+            <h2 className="text-4xl md:text-5xl font-serif text-brand-primary font-bold mb-4">Why Work With {aboutMe.name}?</h2>
             <p className="text-brand-text/70 text-base md:text-lg">
               Redefining luxury property acquisition through architectural expertise, independent fiduciary representation, and absolute confidentiality.
             </p>
@@ -623,7 +562,7 @@ export function Home() {
               </div>
               <h2 className="text-4xl md:text-5xl text-white font-bold">Words from Discerning Homeowners</h2>
               <p className="text-white/70 max-w-2xl text-base md:text-lg mt-2">
-                Real experiences from executives, architects, and modern families who entrusted their acquisition to Sultan Isaac.
+                Real experiences from executives, architects, and modern families who entrusted their acquisition to {aboutMe.name}.
               </p>
             </div>
 
