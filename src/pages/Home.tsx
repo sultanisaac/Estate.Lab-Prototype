@@ -306,70 +306,85 @@ export function Home() {
       </section>
 
       {/* Meet Your Advisor Section */}
-      <section className="py-20 sm:py-24 bg-brand-background border-b border-brand-accent/50">
-        <div className="container mx-auto px-4 md:px-8 max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      <section className="py-14 sm:py-16 lg:py-20 bg-brand-background border-b border-brand-accent/50">
+        <div className="container mx-auto px-4 md:px-8 lg:px-12 max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
             
-            {/* Advisor Image Column */}
-            <div className="lg:col-span-5 relative">
-              <div className="relative mx-auto max-w-md lg:max-w-none">
-                <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-white">
+            {/* Advisor Image Column (9:16 Aspect Ratio) */}
+            <div className="lg:col-span-4 relative">
+              <div className="relative mx-auto max-w-[300px] sm:max-w-[320px] lg:max-w-none">
+                <div className="relative aspect-[9/16] rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-white group">
                   <img
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800"
-                    alt="Sultan Isaac - Private Real Estate Advisor"
-                    className="w-full h-[400px] sm:h-[480px] object-cover"
+                    src={aboutMe.portraitUrl || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800"}
+                    alt={`${aboutMe.name || 'Advisor'} - ${aboutMe.title || 'Private Real Estate Advisor'}`}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800';
+                    }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                  <div className="absolute bottom-6 left-6 right-6 text-white">
-                    <span className="text-[11px] uppercase tracking-widest text-brand-secondary font-semibold">Principal Broker</span>
-                    <h4 className="text-2xl font-serif font-bold text-white">Sultan Isaac</h4>
-                    <p className="text-xs text-white/80">Estate.Lab Private Advisory</p>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none"></div>
+                  <div className="absolute bottom-5 left-5 right-5 text-white pointer-events-none">
+                    <span className="text-[10px] sm:text-[11px] uppercase tracking-widest text-brand-secondary font-semibold block mb-0.5">
+                      {aboutMe.roleTag || "Principal Advisor"}
+                    </span>
+                    <h4 className="text-xl sm:text-2xl font-serif font-bold text-white leading-tight">
+                      {aboutMe.name || "Sultan Isaac"}
+                    </h4>
+                    <p className="text-xs text-white/80 truncate mt-0.5">
+                      {aboutMe.title || "Estate.Lab Private Advisory"}
+                    </p>
                   </div>
                 </div>
 
-                <div className="absolute -bottom-5 -right-4 sm:-right-6 bg-white p-4 sm:p-5 rounded-2xl shadow-xl border border-brand-accent/50 max-w-[200px]">
-                  <p className="text-[11px] uppercase tracking-wider text-brand-primary font-bold">Direct Access</p>
-                  <p className="text-xs text-brand-text/70 font-medium mt-1">One client at a time, dedicated representation.</p>
+                {/* Floating Status Badge Card */}
+                <div className="absolute -bottom-4 -right-2 sm:-right-4 bg-white/95 backdrop-blur-md p-3.5 sm:p-4 rounded-2xl shadow-xl border border-brand-accent/60 max-w-[210px]">
+                  <div className="flex items-center gap-1.5 text-brand-primary font-bold text-xs uppercase tracking-wider mb-0.5">
+                    <span className="w-2 h-2 rounded-full bg-brand-secondary animate-pulse"></span>
+                    <span>{aboutMe.statusBadge?.status || "Active Advisory"}</span>
+                  </div>
+                  <p className="text-[11px] text-brand-text/75 leading-tight">
+                    {aboutMe.statusBadge?.subtext || "One client at a time, dedicated representation."}
+                  </p>
                 </div>
               </div>
             </div>
 
             {/* Advisor Text Column */}
-            <div className="lg:col-span-7 space-y-6">
+            <div className="lg:col-span-8 space-y-5 lg:space-y-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-secondary/20 text-brand-primary text-xs font-semibold border border-brand-secondary/30">
                 <Sparkles size={13} className="text-brand-secondary" />
                 <span>Meet Your Personal Advisor</span>
               </div>
 
-              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-brand-primary font-bold leading-tight">
-                Independent Representation. Architectural Rigor. Uncompromising Discretion.
+              <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-brand-primary font-bold leading-tight">
+                {aboutMe.headlineQuote || "Independent Representation. Architectural Rigor. Uncompromising Discretion."}
               </h2>
 
-              <p className="text-brand-text/80 text-base sm:text-lg leading-relaxed font-light">
-                Acquiring an architecturally significant residence requires more than scrolling listings—it demands an advisor who understands structural integrity, light orientation, and unyielding privacy.
+              <p className="text-brand-text/80 text-sm sm:text-base lg:text-lg leading-relaxed font-light">
+                {aboutMe.bio1 || "Acquiring an architecturally significant residence requires more than scrolling listings—it demands an advisor who understands structural integrity, light orientation, and unyielding privacy."}
               </p>
 
-              <p className="text-brand-text/80 text-base sm:text-lg leading-relaxed font-light">
-                As your personal broker, I operate as an unbiased fiduciary. I pre-screen every residence against rigorous architectural standards, negotiate with precision, and unlock private off-market listings that never reach public eyes.
+              <p className="text-brand-text/80 text-sm sm:text-base lg:text-lg leading-relaxed font-light">
+                {aboutMe.bio2 || "As your personal broker, I operate as an unbiased fiduciary. I pre-screen every residence against rigorous architectural standards, negotiate with precision, and unlock private off-market listings that never reach public eyes."}
               </p>
 
-              <div className="pt-2 flex flex-wrap items-center gap-4">
+              <div className="pt-2 flex flex-wrap items-center gap-3.5">
                 <button
                   onClick={() => {
                     navigate('/about-me');
                     window.scrollTo(0, 0);
                   }}
-                  className="px-6 py-3.5 bg-brand-primary hover:bg-[#135d70] text-white rounded-xl font-semibold text-sm transition-all shadow-md flex items-center gap-2"
+                  className="px-6 py-3 bg-brand-primary hover:bg-[#135d70] text-white rounded-xl font-semibold text-sm transition-all shadow-md flex items-center gap-2 group"
                 >
                   <span>Read Biography & Track Record</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
                   onClick={() => {
                     navigate('/contact');
                     window.scrollTo(0, 0);
                   }}
-                  className="px-6 py-3.5 bg-white hover:bg-gray-50 border border-brand-accent/60 text-brand-primary rounded-xl font-semibold text-sm transition-all"
+                  className="px-6 py-3 bg-white hover:bg-gray-50 border border-brand-accent/80 text-brand-primary rounded-xl font-semibold text-sm transition-all shadow-sm"
                 >
                   Schedule Private Consultation
                 </button>
