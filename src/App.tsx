@@ -7,9 +7,11 @@ import { Booking } from './pages/Booking';
 import { Legal } from './pages/Legal';
 import { PropertyDetails } from './pages/PropertyDetails';
 import { Properties } from './pages/Properties';
-import { AboutUs } from './pages/AboutUs';
+import { AboutMe } from './pages/AboutMe';
+import { Contact } from './pages/Contact';
 import { PageTransition } from './components/layout/PageTransition';
 import { AdminLayout } from './pages/admin/AdminLayout';
+import { FloatingWhatsApp } from './components/ui/FloatingWhatsApp';
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -20,7 +22,10 @@ function AnimatedRoutes() {
         <Route path="/" element={<PageTransition><Home /></PageTransition>} />
         <Route path="/property/:id" element={<PageTransition><PropertyDetails /></PageTransition>} />
         <Route path="/properties" element={<PageTransition><Properties /></PageTransition>} />
-        <Route path="/aboutus" element={<PageTransition><AboutUs /></PageTransition>} />
+        <Route path="/about-me" element={<PageTransition><AboutMe /></PageTransition>} />
+        <Route path="/about" element={<PageTransition><AboutMe /></PageTransition>} />
+        <Route path="/aboutus" element={<PageTransition><AboutMe /></PageTransition>} />
+        <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
         <Route path="/booking" element={<PageTransition><Booking /></PageTransition>} />
         <Route path="/legal" element={<PageTransition><Legal /></PageTransition>} />
         <Route path="/admin/*" element={<AdminLayout />} />
@@ -38,12 +43,13 @@ function AppLayout() {
   }
 
   return (
-    <div className="min-h-screen font-sans selection:bg-brand-secondary/30 selection:text-brand-primary flex flex-col">
+    <div className="min-h-screen font-sans selection:bg-brand-secondary/30 selection:text-brand-primary flex flex-col relative">
       <Navbar />
       <main className="flex-grow">
         <AnimatedRoutes />
       </main>
       <Footer />
+      <FloatingWhatsApp />
     </div>
   );
 }

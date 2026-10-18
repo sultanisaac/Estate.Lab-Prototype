@@ -1,0 +1,357 @@
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Phone, Mail, MapPin, Clock, ShieldCheck, CheckCircle2, Send, MessageCircle } from 'lucide-react';
+import { Button } from '../components/ui/Button';
+
+export function Contact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    consultationType: 'buying',
+    meetingFormat: 'in-person',
+    preferredTime: '',
+    message: ''
+  });
+
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Simulate submission / store inquiry
+    setTimeout(() => {
+      setLoading(false);
+      setSubmitted(true);
+    }, 600);
+  };
+
+  const whatsappUrl = `https://wa.me/6281123456789?text=${encodeURIComponent(
+    'Hello Sultan, I would like to schedule a private real estate consultation.'
+  )}`;
+
+  return (
+    <div className="pt-24 pb-20 min-h-screen bg-[#FDFCF7]">
+      {/* Hero Header */}
+      <section className="container mx-auto px-4 md:px-8 pt-10 mb-16">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#D4B483]/20 text-[#856937] text-xs font-semibold mb-4"
+          >
+            <span>Direct Client Access</span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-primary font-bold mb-6"
+          >
+            Private Consultation with Sultan Isaac
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-base sm:text-lg text-brand-text/75 leading-relaxed max-w-2xl mx-auto"
+          >
+            Connect directly with your advisor for confidential buyer representation, private viewings, or off-market property inquiries.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* Main Content Grid */}
+      <section className="container mx-auto px-4 md:px-8 max-w-6xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          
+          {/* Left Column: Direct Contact Info & WhatsApp */}
+          <div className="lg:col-span-5 space-y-8">
+            {/* Quick WhatsApp Card */}
+            <div className="bg-[#0F4C5C] text-white p-8 rounded-3xl shadow-xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-[#D4B483]/10 rounded-full blur-2xl"></div>
+              
+              <div className="flex items-center gap-4 mb-6">
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200"
+                  alt="Sultan Isaac"
+                  className="w-16 h-16 rounded-2xl object-cover border-2 border-[#D4B483]"
+                />
+                <div>
+                  <h3 className="font-serif text-xl font-bold text-white">Sultan Isaac</h3>
+                  <p className="text-xs text-[#D4B483] uppercase tracking-wider font-semibold">Private Broker</p>
+                  <p className="text-xs text-white/70 mt-0.5">Average reply time: &lt; 15 mins</p>
+                </div>
+              </div>
+
+              <p className="text-white/80 text-sm leading-relaxed mb-6">
+                Prefer immediate messaging? Reach out directly via WhatsApp for swift response on available inventory and viewing slots.
+              </p>
+
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-3 w-full py-3.5 px-6 bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg text-sm"
+              >
+                <MessageCircle className="w-5 h-5 fill-current" />
+                <span>Message Sultan on WhatsApp</span>
+              </a>
+            </div>
+
+            {/* Direct Channels Card */}
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6">
+              <h4 className="font-serif text-xl font-bold text-brand-primary">Direct Channels</h4>
+              
+              <div className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-brand-secondary/15 flex items-center justify-center shrink-0 text-brand-secondary">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-brand-text/50 uppercase font-semibold">Direct Telephone</p>
+                    <a href="tel:+6281123456789" className="text-brand-primary font-medium hover:text-brand-secondary transition-colors">
+                      +62 811 2345 6789
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-brand-secondary/15 flex items-center justify-center shrink-0 text-brand-secondary">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-brand-text/50 uppercase font-semibold">Confidential Email</p>
+                    <a href="mailto:sultan@estatelab.com" className="text-brand-primary font-medium hover:text-brand-secondary transition-colors">
+                      sultan@estatelab.com
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-brand-secondary/15 flex items-center justify-center shrink-0 text-brand-secondary">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-brand-text/50 uppercase font-semibold">Private Advisory Lounge</p>
+                    <p className="text-brand-text/80 text-sm">
+                      Jl. Sudirman No. 45, Jakarta Selatan,<br />DKI Jakarta 12190
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-brand-secondary/15 flex items-center justify-center shrink-0 text-brand-secondary">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-brand-text/50 uppercase font-semibold">Consultation Hours</p>
+                    <p className="text-brand-text/80 text-sm">
+                      Monday – Saturday: 09:00 – 19:00 WIB<br />Sunday: By Appointment Only
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-gray-100 flex items-center gap-3 text-xs text-gray-500">
+                <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>All discussions and property inquiries are protected under non-disclosure confidentiality.</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Private Consultation Form */}
+          <div className="lg:col-span-7">
+            <div className="bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-gray-100">
+              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-brand-primary mb-2">
+                Request a Private Consultation
+              </h3>
+              <p className="text-brand-text/70 text-sm mb-8">
+                Please complete the form below. Sultan Isaac will personally review your preferences and get in touch within 24 hours.
+              </p>
+
+              {submitted ? (
+                <div className="text-center py-12 space-y-4">
+                  <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                    <CheckCircle2 className="w-9 h-9" />
+                  </div>
+                  <h4 className="font-serif text-2xl font-bold text-brand-primary">Consultation Request Received</h4>
+                  <p className="text-brand-text/70 max-w-md mx-auto text-sm leading-relaxed">
+                    Thank you, <strong className="text-brand-primary">{formData.name}</strong>. Sultan Isaac has received your inquiry and will reach out shortly via {formData.phone || formData.email} to confirm details.
+                  </p>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setSubmitted(false);
+                      setFormData({
+                        name: '',
+                        email: '',
+                        phone: '',
+                        consultationType: 'buying',
+                        meetingFormat: 'in-person',
+                        preferredTime: '',
+                        message: ''
+                      });
+                    }}
+                    className="mt-4 rounded-xl"
+                  >
+                    Submit Another Inquiry
+                  </Button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-xs font-semibold text-brand-primary uppercase tracking-wider mb-2">
+                        Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="e.g. Jonathan Pratama"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary text-sm"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-brand-primary uppercase tracking-wider mb-2">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        placeholder="e.g. jonathan@example.com"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-xs font-semibold text-brand-primary uppercase tracking-wider mb-2">
+                        Phone / WhatsApp *
+                      </label>
+                      <input
+                        type="tel"
+                        required
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        placeholder="e.g. +62 812 3456 7890"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary text-sm"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-brand-primary uppercase tracking-wider mb-2">
+                        Area of Interest
+                      </label>
+                      <select
+                        value={formData.consultationType}
+                        onChange={(e) => setFormData({ ...formData, consultationType: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary text-sm bg-white"
+                      >
+                        <option value="buying">Acquiring a Curated Home</option>
+                        <option value="offmarket">Private Off-Market Inquiries</option>
+                        <option value="selling">Listing / Selling an Estate</option>
+                        <option value="advisory">General Architecture Advisory</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-xs font-semibold text-brand-primary uppercase tracking-wider mb-2">
+                        Meeting Preference
+                      </label>
+                      <select
+                        value={formData.meetingFormat}
+                        onChange={(e) => setFormData({ ...formData, meetingFormat: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary text-sm bg-white"
+                      >
+                        <option value="in-person">Private Lounge Meeting (Sudirman)</option>
+                        <option value="virtual">Virtual Video Call (Zoom / Google Meet)</option>
+                        <option value="onsite">On-Site Property Viewing</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-brand-primary uppercase tracking-wider mb-2">
+                        Preferred Date / Time Window
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.preferredTime}
+                        onChange={(e) => setFormData({ ...formData, preferredTime: e.target.value })}
+                        placeholder="e.g. Tuesday morning, next week"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-brand-primary uppercase tracking-wider mb-2">
+                      Specific Requirements or Target Property
+                    </label>
+                    <textarea
+                      rows={4}
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      placeholder="Share any preferences regarding budget, style (Tropical, Minimalist, Scandinavian, Industrial), or target location..."
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary text-sm"
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="lg"
+                    disabled={loading}
+                    className="w-full rounded-xl py-3.5 flex items-center justify-center gap-2 text-base font-semibold"
+                  >
+                    {loading ? (
+                      <span>Submitting Request...</span>
+                    ) : (
+                      <>
+                        <span>Submit Private Consultation Request</span>
+                        <Send className="w-4 h-4" />
+                      </>
+                    )}
+                  </Button>
+                </form>
+              )}
+            </div>
+          </div>
+
+        </div>
+
+        {/* Map Embed Section */}
+        <div className="mt-16 bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+          <div className="mb-4">
+            <h4 className="font-serif text-lg font-bold text-brand-primary">Advisory Lounge Location</h4>
+            <p className="text-xs text-brand-text/60">Jl. Sudirman No. 45, Jakarta Selatan (By appointment)</p>
+          </div>
+          <div className="h-[340px] rounded-2xl overflow-hidden shadow-inner bg-gray-100">
+            <iframe
+              title="Sultan Isaac Advisory Office"
+              src="https://www.google.com/maps?q=Jl.+Sudirman+No.+45,+Jakarta+Selatan,+DKI+Jakarta+12190&output=embed"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen={true}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

@@ -25,31 +25,39 @@ export function Navbar() {
       "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
       (isScrolled || !isHomePage) ? "bg-white/90 backdrop-blur-md shadow-sm py-4" : "bg-transparent py-6"
     )}>
-      <div className="max-w-5xl mx-auto px-4 md:px-8 flex justify-between items-center">
-        <Link to="/" className="flex items-center gap-2">
+      <div className="max-w-6xl mx-auto px-4 md:px-8 flex justify-between items-center">
+        <Link to="/" className="flex items-center gap-3">
           <img src="/logo.png" alt="Estate.Lab Logo" className="w-10 h-10 object-contain rounded-md shadow-sm" />
-          <span className={clsx(
-            "font-serif font-bold text-2xl tracking-tight transition-colors",
-            (isScrolled || !isHomePage) ? "text-brand-primary" : "text-white"
-          )}>
-            Estate.Lab
-          </span>
-          <span className="ml-2 text-[10px] uppercase tracking-widest bg-brand-secondary/20 text-brand-secondary border border-brand-secondary/30 px-2 py-0.5 rounded-full font-bold hidden sm:inline-block">
-            Prototype
-          </span>
+          <div className="flex flex-col">
+            <span className={clsx(
+              "font-serif font-bold text-xl sm:text-2xl tracking-tight transition-colors leading-none",
+              (isScrolled || !isHomePage) ? "text-brand-primary" : "text-white"
+            )}>
+              Sultan Isaac
+            </span>
+            <span className={clsx(
+              "text-[10px] uppercase tracking-widest font-medium mt-0.5",
+              (isScrolled || !isHomePage) ? "text-brand-secondary" : "text-[#D4B483]"
+            )}>
+              Estate.Lab Advisory
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
           <div className={clsx(
-            "flex gap-6 text-sm font-medium transition-colors",
+            "flex gap-7 text-sm font-medium transition-colors",
             (isScrolled || !isHomePage) ? "text-brand-text" : "text-white/90"
           )}>
             <Link to="/properties" className="hover:text-brand-secondary transition-colors">Properties</Link>
-            <Link to="/aboutus" className="hover:text-brand-secondary transition-colors">About Us</Link>
+            <Link to="/about-me" className="hover:text-brand-secondary transition-colors">About Me</Link>
+            <Link to="/contact" className="hover:text-brand-secondary transition-colors">Contact</Link>
           </div>
-          <Link to="/booking">
-            <Button variant={(isScrolled || !isHomePage) ? "primary" : "secondary"}>Book Viewing</Button>
+          <Link to="/contact">
+            <Button variant={(isScrolled || !isHomePage) ? "primary" : "secondary"} className="rounded-xl px-5">
+              Book Consultation
+            </Button>
           </Link>
         </div>
 
@@ -75,14 +83,16 @@ export function Navbar() {
             className="md:hidden fixed inset-0 z-50 bg-white flex flex-col px-4 py-6"
           >
             <div className="flex justify-between items-center">
-              <Link to="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
+              <Link to="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3">
                 <img src="/logo.png" alt="Estate.Lab Logo" className="w-10 h-10 object-contain rounded-md shadow-sm" />
-                <span className="font-serif font-bold text-2xl tracking-tight text-brand-primary">
-                  Estate.Lab
-                </span>
-                <span className="ml-2 text-[10px] uppercase tracking-widest bg-brand-secondary/20 text-brand-secondary border border-brand-secondary/30 px-2 py-0.5 rounded-full font-bold">
-                  Prototype
-                </span>
+                <div className="flex flex-col">
+                  <span className="font-serif font-bold text-2xl tracking-tight text-brand-primary leading-none">
+                    Sultan Isaac
+                  </span>
+                  <span className="text-[10px] uppercase tracking-widest text-brand-secondary font-medium mt-0.5">
+                    Estate.Lab Advisory
+                  </span>
+                </div>
               </Link>
               <button 
                 className="text-brand-primary p-2"
@@ -92,16 +102,17 @@ export function Navbar() {
               </button>
             </div>
             
-            <div className="flex flex-col gap-8 mt-24 px-4">
-              <Link to="/properties" onClick={() => setMobileMenuOpen(false)} className="text-brand-primary font-serif text-4xl hover:text-brand-secondary transition-colors">Properties</Link>
-              <Link to="/aboutus" onClick={() => setMobileMenuOpen(false)} className="text-brand-primary font-serif text-4xl hover:text-brand-secondary transition-colors">About Us</Link>
+            <div className="flex flex-col gap-6 mt-20 px-4">
+              <Link to="/properties" onClick={() => setMobileMenuOpen(false)} className="text-brand-primary font-serif text-3xl hover:text-brand-secondary transition-colors">Properties</Link>
+              <Link to="/about-me" onClick={() => setMobileMenuOpen(false)} className="text-brand-primary font-serif text-3xl hover:text-brand-secondary transition-colors">About Me</Link>
+              <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="text-brand-primary font-serif text-3xl hover:text-brand-secondary transition-colors">Contact</Link>
             </div>
             
-            <div className="mt-auto px-4 pb-6 flex flex-col gap-6">
-              <Link to="/booking" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="primary" size="lg" className="w-full text-lg py-4">Book Viewing</Button>
+            <div className="mt-auto px-4 pb-6 flex flex-col gap-4">
+              <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="primary" size="lg" className="w-full text-base py-4 rounded-xl">Book Consultation</Button>
               </Link>
-              <p className="text-brand-text/50 text-sm text-center">&copy; {new Date().getFullYear()} Estate.Lab. All rights reserved.</p>
+              <p className="text-brand-text/50 text-xs text-center">&copy; {new Date().getFullYear()} Sultan Isaac • Estate.Lab Advisory.</p>
             </div>
           </motion.div>
         )}

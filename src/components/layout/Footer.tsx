@@ -46,33 +46,35 @@ export function Footer() {
       <div className="container mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div>
-            <a href="#" className="flex items-center gap-2 mb-6">
+            <Link to="/" className="flex items-center gap-3 mb-6">
               <img src="/logo.png" alt="Estate.Lab Logo" className="w-10 h-10 object-contain rounded-md" />
-              <span className="font-serif font-bold text-2xl tracking-tight text-white">
-                Estate.Lab
-              </span>
-              <span className="ml-2 text-[10px] uppercase tracking-widest bg-brand-secondary/20 text-brand-secondary border border-brand-secondary/30 px-2 py-0.5 rounded-full font-bold">
-                Prototype
-              </span>
-            </a>
-            <p className="text-gray-400 mb-6 leading-relaxed">
-              Engineered for living. Designed for you. We build premium, architecturally significant homes for the modern family.
+              <div className="flex flex-col">
+                <span className="font-serif font-bold text-xl tracking-tight text-white leading-none">
+                  Sultan Isaac
+                </span>
+                <span className="text-[10px] uppercase tracking-widest text-brand-secondary font-medium mt-0.5">
+                  Estate.Lab Advisory
+                </span>
+              </div>
+            </Link>
+            <p className="text-gray-400 mb-6 leading-relaxed text-sm">
+              Private real estate advisory & brokerage by Sultan Isaac. Curating architecturally significant homes, off-market opportunities, and discreet acquisitions.
             </p>
-
           </div>
           
           <div>
             <h4 className="text-white font-serif text-xl mb-6">Quick Links</h4>
-            <ul className="flex flex-col gap-3">
-              <li><Link to="/properties" className="hover:text-brand-secondary transition-colors">Properties</Link></li>
-              <li><Link to="/aboutus" className="hover:text-brand-secondary transition-colors">About Us</Link></li>
+            <ul className="flex flex-col gap-3 text-sm">
+              <li><Link to="/properties" className="hover:text-brand-secondary transition-colors">Curated Properties</Link></li>
+              <li><Link to="/about-me" className="hover:text-brand-secondary transition-colors">About Sultan Isaac</Link></li>
+              <li><Link to="/contact" className="hover:text-brand-secondary transition-colors">Private Consultation</Link></li>
               <li><Link to="/legal" className="hover:text-brand-secondary transition-colors">Legal & Privacy</Link></li>
             </ul>
           </div>
           
           <div>
-            <h4 className="text-white font-serif text-xl mb-6">Contact Us</h4>
-            <ul className="flex flex-col gap-4">
+            <h4 className="text-white font-serif text-xl mb-6">Direct Advisory</h4>
+            <ul className="flex flex-col gap-4 text-sm">
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-brand-secondary shrink-0 mt-0.5" />
                 <span>Jl. Sudirman No. 45, Jakarta Selatan,<br/>DKI Jakarta 12190</span>
@@ -83,7 +85,7 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-brand-secondary shrink-0" />
-                <span>hello@estatelab.com</span>
+                <span>sultan@estatelab.com</span>
               </li>
             </ul>
           </div>

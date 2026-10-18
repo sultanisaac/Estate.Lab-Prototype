@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Shield, Award, Users, PenTool, CheckCircle, Star, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Shield, Award, Users, Star, ArrowRight, ChevronLeft, ChevronRight, Compass, Sparkles, Key } from 'lucide-react';
 
 import { PropertyCard } from '../components/ui/PropertyCard';
 import { StyleCard } from '../components/ui/StyleCard';
@@ -271,53 +271,172 @@ export function Home() {
         </div>
         
         <div className="container mx-auto px-4 md:px-8 relative z-10 text-center mt-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-[#D4B483]/40 text-[#D4B483] text-xs font-semibold uppercase tracking-widest mb-6"
+          >
+            <span>Private Real Estate Brokerage & Advisory</span>
+          </motion.div>
+
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl md:text-7xl font-serif text-white font-bold mb-6 tracking-tight drop-shadow-md"
+            className="text-5xl md:text-7xl font-serif text-white font-bold mb-6 tracking-tight drop-shadow-md max-w-5xl mx-auto leading-tight"
           >
-            Engineered for Living.<br className="hidden md:block"/> Designed for You.
+            Sultan Isaac
+            <span className="block text-2xl sm:text-3xl md:text-4xl font-light text-[#D4B483] mt-2 font-sans tracking-normal">
+              Curator of Architectural Residences & Private Estates
+            </span>
           </motion.h1>
+
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-lg md:text-xl text-brand-accent/90 max-w-2xl mx-auto mb-12 drop-shadow"
+            className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-10 drop-shadow font-light leading-relaxed"
           >
-            Discover architecturally significant homes that blend premium luxury with unparalleled functional design.
+            Guiding discerning individuals and families through vetted architectural residences, off-market opportunities, and discreet acquisitions.
           </motion.p>
           
-
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="flex flex-wrap items-center justify-center gap-4"
+          >
+            <button
+              onClick={() => {
+                navigate('/contact');
+                window.scrollTo(0, 0);
+              }}
+              className="px-8 py-4 bg-[#D4B483] hover:bg-[#c29f6b] text-[#0F4C5C] font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base flex items-center gap-2"
+            >
+              <span>Book Private Consultation</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <a
+              href="#properties"
+              className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/20 font-semibold rounded-xl transition-all duration-300 text-base"
+            >
+              Explore Curated Portfolio
+            </a>
+          </motion.div>
         </div>
       </section>
 
       {/* Trust Signals */}
       <section className="bg-brand-primary text-white py-8 border-b-4 border-brand-secondary">
         <div className="container mx-auto px-4 md:px-8">
-          <div className="flex flex-wrap justify-center gap-8 md:gap-16 items-center text-center">
-            <div className="flex items-center gap-3">
-              <Award className="w-8 h-8 text-brand-secondary" />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-center text-center">
+            <div className="flex items-center justify-center gap-3">
+              <Award className="w-7 h-7 text-brand-secondary shrink-0" />
               <div className="text-left">
-                <p className="font-bold text-lg">15+ Years</p>
-                <p className="text-white/70 text-sm">Experience</p>
+                <p className="font-bold text-base sm:text-lg">15+ Years</p>
+                <p className="text-white/70 text-xs sm:text-sm">Private Advisory</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <Users className="w-8 h-8 text-brand-secondary" />
+            <div className="flex items-center justify-center gap-3">
+              <Compass className="w-7 h-7 text-brand-secondary shrink-0" />
               <div className="text-left">
-                <p className="font-bold text-lg">1,500+</p>
-                <p className="text-white/70 text-sm">Happy Families</p>
+                <p className="font-bold text-base sm:text-lg">$40M+ Volume</p>
+                <p className="text-white/70 text-xs sm:text-sm">Closed Transactions</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <PenTool className="w-8 h-8 text-brand-secondary" />
+
+            <div className="flex items-center justify-center gap-3">
+              <Users className="w-7 h-7 text-brand-secondary shrink-0" />
               <div className="text-left">
-                <p className="font-bold text-lg">Board-Certified</p>
-                <p className="text-white/70 text-sm">Architects</p>
+                <p className="font-bold text-base sm:text-lg">98% Retention</p>
+                <p className="text-white/70 text-xs sm:text-sm">Client Referrals</p>
               </div>
             </div>
+
+            <div className="flex items-center justify-center gap-3">
+              <Shield className="w-7 h-7 text-brand-secondary shrink-0" />
+              <div className="text-left">
+                <p className="font-bold text-base sm:text-lg">100% Discretion</p>
+                <p className="text-white/70 text-xs sm:text-sm">Fiduciary Privacy</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Meet Your Advisor Section */}
+      <section className="py-20 sm:py-24 bg-[#FDFCF7] border-b border-gray-100">
+        <div className="container mx-auto px-4 md:px-8 max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            
+            {/* Advisor Image Column */}
+            <div className="lg:col-span-5 relative">
+              <div className="relative mx-auto max-w-md lg:max-w-none">
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-white">
+                  <img
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800"
+                    alt="Sultan Isaac - Private Real Estate Advisor"
+                    className="w-full h-[400px] sm:h-[480px] object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  <div className="absolute bottom-6 left-6 right-6 text-white">
+                    <span className="text-[11px] uppercase tracking-widest text-[#D4B483] font-semibold">Principal Broker</span>
+                    <h4 className="text-2xl font-serif font-bold">Sultan Isaac</h4>
+                    <p className="text-xs text-white/80">Estate.Lab Private Advisory</p>
+                  </div>
+                </div>
+
+                <div className="absolute -bottom-5 -right-4 sm:-right-6 bg-white p-4 sm:p-5 rounded-2xl shadow-xl border border-gray-100 max-w-[200px]">
+                  <p className="text-[11px] uppercase tracking-wider text-[#856937] font-bold">Direct Access</p>
+                  <p className="text-xs text-gray-700 font-medium mt-1">One client at a time, dedicated representation.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Advisor Text Column */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#D4B483]/20 text-[#856937] text-xs font-semibold">
+                <Sparkles size={13} className="text-[#856937]" />
+                <span>Meet Your Personal Advisor</span>
+              </div>
+
+              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-brand-primary font-bold leading-tight">
+                Independent Representation. Architectural Rigor. Uncompromising Discretion.
+              </h2>
+
+              <p className="text-brand-text/80 text-base sm:text-lg leading-relaxed font-light">
+                Acquiring an architecturally significant residence requires more than scrolling listings—it demands an advisor who understands structural integrity, light orientation, and unyielding privacy.
+              </p>
+
+              <p className="text-brand-text/80 text-base sm:text-lg leading-relaxed font-light">
+                As your personal broker, I operate as an unbiased fiduciary. I pre-screen every residence against rigorous architectural standards, negotiate with precision, and unlock private off-market listings that never reach public eyes.
+              </p>
+
+              <div className="pt-2 flex flex-wrap items-center gap-4">
+                <button
+                  onClick={() => {
+                    navigate('/about-me');
+                    window.scrollTo(0, 0);
+                  }}
+                  className="px-6 py-3.5 bg-brand-primary hover:bg-[#135d70] text-white rounded-xl font-semibold text-sm transition-all shadow-md flex items-center gap-2"
+                >
+                  <span>Read Biography & Track Record</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/contact');
+                    window.scrollTo(0, 0);
+                  }}
+                  className="px-6 py-3.5 bg-white hover:bg-gray-50 border border-gray-200 text-brand-primary rounded-xl font-semibold text-sm transition-all"
+                >
+                  Schedule Private Consultation
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -333,11 +452,11 @@ export function Home() {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4B483]/20 text-[#856937] text-xs font-semibold mb-3">
                 <Star size={12} className="fill-[#D4B483] text-[#D4B483]" />
-                <span>Featured Spotlight</span>
+                <span>Broker's Handpicked Portfolio</span>
               </div>
               <h2 className="text-4xl md:text-5xl font-serif text-brand-primary font-bold">The Curated Collections</h2>
               <p className="text-brand-text/70 max-w-2xl text-base md:text-lg mt-2">
-                Explore our meticulously designed property variants, tailored for every stage of your life journey.
+                Hand-selected architectural residences meeting rigorous standards for light, spatial flow, and enduring value.
               </p>
             </div>
 
@@ -430,37 +549,58 @@ export function Home() {
         </div>
       </section>
 
-      {/* Why Choose Us */}
+      {/* Why Work With Me */}
       <section id="about" className="py-24 bg-white">
         <div className="container mx-auto px-4 md:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-serif text-brand-primary font-bold mb-4">Why Choose Estate.Lab?</h2>
-            <p className="text-brand-text/70 max-w-2xl mx-auto text-lg">We redefine the real estate experience through transparency, innovation, and unwavering quality.</p>
+          <div className="text-center mb-16 max-w-3xl mx-auto">
+            <span className="text-xs uppercase tracking-widest text-[#856937] font-semibold mb-2 block">
+              Bespoke Representation
+            </span>
+            <h2 className="text-4xl md:text-5xl font-serif text-brand-primary font-bold mb-4">Why Work With Sultan Isaac?</h2>
+            <p className="text-brand-text/70 text-base md:text-lg">
+              Redefining luxury property acquisition through architectural expertise, independent fiduciary representation, and absolute confidentiality.
+            </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="text-center group">
-              <div className="w-20 h-20 mx-auto bg-brand-background rounded-full flex items-center justify-center mb-6 group-hover:bg-brand-secondary/20 transition-colors">
-                <CheckCircle className="w-10 h-10 text-brand-primary" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="bg-brand-background/60 p-8 rounded-2xl border border-gray-100 hover:border-[#D4B483]/50 transition-all duration-300 group">
+              <div className="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center mb-6 group-hover:bg-[#0F4C5C] group-hover:text-white transition-all text-[#0F4C5C]">
+                <Shield className="w-7 h-7" />
               </div>
-              <h4 className="text-2xl font-serif text-brand-primary mb-4">Transparent Pricing</h4>
-              <p className="text-brand-text/70 leading-relaxed">No hidden fees, no surprise costs. We provide a comprehensive breakdown of all expenses from day one, ensuring absolute peace of mind.</p>
+              <h4 className="text-xl font-serif text-brand-primary font-bold mb-3">Unbiased Buyer Advocacy</h4>
+              <p className="text-brand-text/70 text-sm leading-relaxed">
+                Operating with independent fiduciary integrity. Zero developer quotas, transparent pricing, and relentless negotiation on your behalf.
+              </p>
             </div>
             
-            <div className="text-center group">
-              <div className="w-20 h-20 mx-auto bg-brand-background rounded-full flex items-center justify-center mb-6 group-hover:bg-brand-secondary/20 transition-colors">
-                <Shield className="w-10 h-10 text-brand-primary" />
+            <div className="bg-brand-background/60 p-8 rounded-2xl border border-gray-100 hover:border-[#D4B483]/50 transition-all duration-300 group">
+              <div className="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center mb-6 group-hover:bg-[#0F4C5C] group-hover:text-white transition-all text-[#0F4C5C]">
+                <Compass className="w-7 h-7" />
               </div>
-              <h4 className="text-2xl font-serif text-brand-primary mb-4">End-to-End Legal Assistance</h4>
-              <p className="text-brand-text/70 leading-relaxed">Our in-house legal team manages all documentation, permits, and notarization, making the ownership transfer seamless and secure.</p>
+              <h4 className="text-xl font-serif text-brand-primary font-bold mb-3">Architectural Due Diligence</h4>
+              <p className="text-brand-text/70 text-sm leading-relaxed">
+                Every residence undergoes rigorous screening—verifying cross-ventilation, natural illumination, material grade, and enduring resale appeal.
+              </p>
             </div>
             
-            <div className="text-center group">
-              <div className="w-20 h-20 mx-auto bg-brand-background rounded-full flex items-center justify-center mb-6 group-hover:bg-brand-secondary/20 transition-colors">
-                <Award className="w-10 h-10 text-brand-primary" />
+            <div className="bg-brand-background/60 p-8 rounded-2xl border border-gray-100 hover:border-[#D4B483]/50 transition-all duration-300 group">
+              <div className="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center mb-6 group-hover:bg-[#0F4C5C] group-hover:text-white transition-all text-[#0F4C5C]">
+                <Key className="w-7 h-7" />
               </div>
-              <h4 className="text-2xl font-serif text-brand-primary mb-4">Smart Home Integration</h4>
-              <p className="text-brand-text/70 leading-relaxed">Every Estate.Lab home comes pre-wired for the future, featuring baseline smart home security, lighting, and climate control readiness.</p>
+              <h4 className="text-xl font-serif text-brand-primary font-bold mb-3">Off-Market Pocket Access</h4>
+              <p className="text-brand-text/70 text-sm leading-relaxed">
+                Gain discreet access to private listings, estate sales, and pre-launch architectural allocations shielded from public portals.
+              </p>
+            </div>
+
+            <div className="bg-brand-background/60 p-8 rounded-2xl border border-gray-100 hover:border-[#D4B483]/50 transition-all duration-300 group">
+              <div className="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center mb-6 group-hover:bg-[#0F4C5C] group-hover:text-white transition-all text-[#0F4C5C]">
+                <Sparkles className="w-7 h-7" />
+              </div>
+              <h4 className="text-xl font-serif text-brand-primary font-bold mb-3">White-Glove Discretion</h4>
+              <p className="text-brand-text/70 text-sm leading-relaxed">
+                From strict non-disclosure protections to complete notary, legal, and escrow management, every deal is handled seamlessly.
+              </p>
             </div>
           </div>
         </div>
@@ -479,11 +619,11 @@ export function Home() {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-brand-secondary text-xs font-semibold mb-3">
                 <Star size={12} className="fill-brand-secondary text-brand-secondary" />
-                <span>Verified Homeowners</span>
+                <span>Private Client Endorsements</span>
               </div>
-              <h2 className="text-4xl md:text-5xl text-white font-bold">Words from Our Homeowners</h2>
+              <h2 className="text-4xl md:text-5xl text-white font-bold">Words from Discerning Homeowners</h2>
               <p className="text-white/70 max-w-2xl text-base md:text-lg mt-2">
-                Real stories from families and professionals who found their dream architectural home.
+                Real experiences from executives, architects, and modern families who entrusted their acquisition to Sultan Isaac.
               </p>
             </div>
 
