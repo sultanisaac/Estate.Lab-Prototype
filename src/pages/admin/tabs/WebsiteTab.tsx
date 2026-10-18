@@ -1,18 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   User, MessageSquareQuote, Save, Plus, Trash2, Edit3, 
-  Star, Check, Sparkles, AlertCircle, RefreshCw
+  Star, Check, Sparkles, AlertCircle, RefreshCw, Upload
 } from 'lucide-react';
 import { 
   getWebsiteContent, saveWebsiteContent, 
   type WebsiteContent, type Testimonial, type Milestone 
 } from '../../../data/websiteContent';
+import { ImageCropperModal } from '../../../components/admin/ImageCropperModal';
 
 export function WebsiteTab() {
   const [activeTab, setActiveTab] = useState<'about' | 'testimonials'>('about');
   const [content, setContent] = useState<WebsiteContent>(getWebsiteContent());
   const [isSaving, setIsSaving] = useState(false);
   const [saveToast, setSaveToast] = useState<string | null>(null);
+
+  // 9:16 Portrait Cropper state
+  const [cropperModal, setCropperModal] = useState<{
+    isOpen: boolean;
+    imageSrc: string | null;
+  }>({
+    isOpen: false,
+    imageSrc: null,
+  });
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Testimonials state
   const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null);
@@ -21,6 +32,7 @@ export function WebsiteTab() {
     isOpen: false,
     id: null
   });
+  const [isDeletePortraitModalOpen, setIsDeletePortraitModalOpen] = useState(false);
 
   // New Milestone inline state
   const [isAddingMilestone, setIsAddingMilestone] = useState(false);
@@ -47,6 +59,69 @@ export function WebsiteTab() {
       setIsSaving(false);
       triggerToast('About Me content successfully saved and published!');
     }, 400);
+  };
+
+  // 9:16 Portrait Upload & Crop Handlers
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please select a valid image file (JPG, PNG, WebP).');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      setCropperModal({
+        isOpen: true,
+        imageSrc: result,
+      });
+    };
+    reader.readAsDataURL(file);
+
+    // Reset input so the same file can be selected again
+    e.target.value = '';
+  };
+
+  const handleCropComplete = (_blob: Blob, _previewUrl: string) => {
+    setCropperModal({ isOpen: false, imageSrc: null });
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64data = reader.result as string;
+      const updated = {
+        ...content,
+        aboutMe: {
+          ...content.aboutMe,
+          portraitUrl: base64data
+        }
+      };
+      setContent(updated);
+      saveWebsiteContent(updated);
+      triggerToast('9:16 Portrait photo cropped and updated!');
+    };
+    reader.readAsDataURL(_blob);
+  };
+
+  const handleDeletePortrait = () => {
+    if (!content.aboutMe.portraitUrl) return;
+    setIsDeletePortraitModalOpen(true);
+  };
+
+  const handleConfirmDeletePortrait = () => {
+    const updated = {
+      ...content,
+      aboutMe: {
+        ...content.aboutMe,
+        portraitUrl: ''
+      }
+    };
+    setContent(updated);
+    saveWebsiteContent(updated);
+    setIsDeletePortraitModalOpen(false);
+    triggerToast('Portrait image removed.');
   };
 
   // Testimonial Form Handlers
@@ -241,35 +316,93 @@ export function WebsiteTab() {
             </h2>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              {/* Photo Preview & URL */}
+              {/* 9:16 Photo Upload & Preview */}
               <div className="lg:col-span-4 space-y-4">
-                <label className="block text-xs font-semibold text-brand-primary uppercase tracking-wider">
-                  Advisor Portrait Photo URL
-                </label>
-                <div className="w-full h-80 rounded-2xl overflow-hidden border-2 border-brand-secondary shadow-md bg-brand-background relative group">
-                  <img 
-                    src={content.aboutMe.portraitUrl} 
-                    alt={content.aboutMe.name} 
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800';
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs p-4 text-center">
-                    Enter any high-res image URL below to update portrait
-                  </div>
-                </div>
-                <input
-                  type="url"
-                  required
-                  value={content.aboutMe.portraitUrl}
-                  onChange={(e) => setContent({
-                    ...content,
-                    aboutMe: { ...content.aboutMe, portraitUrl: e.target.value }
-                  })}
-                  className="w-full px-4 py-2.5 rounded-xl border border-brand-accent/80 bg-brand-background/40 text-xs text-brand-text placeholder:text-brand-text/40 focus:ring-1 focus:ring-brand-primary focus:border-brand-primary transition-all"
-                  placeholder="https://..."
+                <input 
+                  ref={fileInputRef}
+                  type="file" 
+                  accept="image/*" 
+                  className="hidden" 
+                  onChange={handleFileSelect}
                 />
+
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-semibold text-brand-primary uppercase tracking-wider">
+                    Advisor Portrait
+                  </label>
+                  <span className="text-[11px] font-semibold text-brand-secondary bg-brand-secondary/15 px-2.5 py-0.5 rounded-full border border-brand-secondary/30">
+                    9:16 Strict Ratio
+                  </span>
+                </div>
+
+                {content.aboutMe.portraitUrl ? (
+                  <div className="space-y-3">
+                    {/* 9:16 Aspect Ratio Frame */}
+                    <div className="w-full max-w-[260px] mx-auto aspect-[9/16] rounded-2xl overflow-hidden border-2 border-brand-secondary shadow-lg bg-brand-background relative group">
+                      <img 
+                        src={content.aboutMe.portraitUrl} 
+                        alt={content.aboutMe.name} 
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800';
+                        }}
+                      />
+                      {/* Gradient & Overlay Info */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none"></div>
+                      <div className="absolute bottom-3 left-3 right-3 text-white pointer-events-none">
+                        <span className="text-[10px] uppercase font-bold tracking-wider text-brand-secondary block">
+                          9:16 Aspect Ratio
+                        </span>
+                        <p className="text-xs font-serif font-bold truncate">{content.aboutMe.name || 'Advisor Portrait'}</p>
+                      </div>
+                    </div>
+
+                    {/* Upload / Replace & Delete Buttons directly on/under image */}
+                    <div className="flex gap-2 max-w-[260px] mx-auto">
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="flex-1 px-3 py-2.5 bg-brand-primary hover:bg-[#135d70] text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 shadow-sm transition-all border border-brand-primary"
+                      >
+                        <Upload size={14} className="text-brand-secondary" />
+                        <span>Upload / Replace</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleDeletePortrait}
+                        className="px-3.5 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 border border-red-200 transition-colors"
+                        title="Delete Portrait Image"
+                      >
+                        <Trash2 size={14} />
+                        <span>Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  /* Empty state dropzone when no image exists */
+                  <div 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full max-w-[260px] mx-auto aspect-[9/16] rounded-2xl border-2 border-dashed border-brand-secondary/60 bg-brand-background/60 hover:bg-brand-background hover:border-brand-secondary cursor-pointer flex flex-col items-center justify-center p-6 text-center transition-all group shadow-sm"
+                  >
+                    <div className="w-14 h-14 rounded-full bg-brand-secondary/20 text-brand-primary flex items-center justify-center mb-3 group-hover:scale-110 transition-transform border border-brand-secondary/30">
+                      <Upload size={24} className="text-brand-secondary" />
+                    </div>
+                    <p className="text-xs font-serif font-bold text-brand-primary mb-1">
+                      Upload 9:16 Portrait
+                    </p>
+                    <p className="text-[11px] text-brand-text/60 leading-relaxed mb-4">
+                      Click to choose an image from your device. Opens the 9:16 zoom & crop modal.
+                    </p>
+                    <span className="px-3 py-1.5 rounded-lg bg-brand-primary text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm border border-brand-primary">
+                      <Upload size={13} className="text-brand-secondary" />
+                      <span>Choose File</span>
+                    </span>
+                  </div>
+                )}
+
+                <p className="text-[11px] text-center text-brand-text/60 max-w-[260px] mx-auto leading-relaxed">
+                  Only 9:16 ratio images are supported. File selection automatically launches the zoom & crop framing tool.
+                </p>
               </div>
 
               {/* Bio & Headlines */}
@@ -841,6 +974,51 @@ export function WebsiteTab() {
           </div>
         </div>
       )}
+
+      {/* ======================================================== */}
+      {/* PORTRAIT DELETE CONFIRMATION MODAL */}
+      {/* ======================================================== */}
+      {isDeletePortraitModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-brand-accent">
+            <div className="w-12 h-12 bg-red-50 text-red-600 border border-red-200 rounded-full flex items-center justify-center mx-auto">
+              <Trash2 size={24} />
+            </div>
+            <h4 className="font-serif text-xl font-bold text-brand-primary">Remove Portrait?</h4>
+            <p className="text-xs text-brand-text/70 leading-relaxed">
+              Are you sure you want to remove the advisor portrait image? You can upload and crop a new 9:16 portrait photo at any time.
+            </p>
+            <div className="flex justify-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setIsDeletePortraitModalOpen(false)}
+                className="px-4 py-2 rounded-xl border border-brand-accent text-xs font-semibold text-brand-primary hover:bg-brand-background transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDeletePortrait}
+                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-semibold shadow-md"
+              >
+                Yes, Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* 9:16 PORTRAIT IMAGE CROPPER & ZOOM MODAL */}
+      {/* ======================================================== */}
+      <ImageCropperModal
+        isOpen={cropperModal.isOpen}
+        imageSrc={cropperModal.imageSrc}
+        imageLabel="Advisor Portrait (9:16)"
+        aspectRatio="9:16"
+        onClose={() => setCropperModal({ isOpen: false, imageSrc: null })}
+        onCropComplete={handleCropComplete}
+      />
     </div>
   );
 }

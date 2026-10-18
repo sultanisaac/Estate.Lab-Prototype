@@ -34,7 +34,7 @@ export function AboutMe() {
             <div className="relative mx-auto max-w-md lg:max-w-none">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-white">
                 <img 
-                  src={data.portraitUrl} 
+                  src={data.portraitUrl || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800'} 
                   alt={`${data.name} - ${data.title}`} 
                   className="w-full h-[460px] md:h-[520px] object-cover"
                 />

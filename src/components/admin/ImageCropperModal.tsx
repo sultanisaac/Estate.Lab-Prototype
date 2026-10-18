@@ -6,6 +6,7 @@ interface ImageCropperModalProps {
   isOpen: boolean;
   imageSrc: string | null;
   imageLabel?: string;
+  aspectRatio?: '16:9' | '9:16';
   onClose: () => void;
   onCropComplete: (croppedBlob: Blob, previewUrl: string) => void;
 }
@@ -14,6 +15,7 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
   isOpen,
   imageSrc,
   imageLabel = 'Property Image',
+  aspectRatio = '16:9',
   onClose,
   onCropComplete,
 }) => {
@@ -110,9 +112,10 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
       const img = imageRef.current;
       const containerRect = container.getBoundingClientRect();
 
-      // We want to export at a crisp 16:9 canvas resolution (e.g., 1920x1080)
-      const exportWidth = 1920;
-      const exportHeight = 1080;
+      const isPortrait = aspectRatio === '9:16';
+      // Export canvas resolution based on aspect ratio
+      const exportWidth = isPortrait ? 1080 : 1920;
+      const exportHeight = isPortrait ? 1920 : 1080;
 
       const canvas = document.createElement('canvas');
       canvas.width = exportWidth;
@@ -140,17 +143,17 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
 
       // Natural image aspect calculation
       const naturalAspect = img.naturalWidth / img.naturalHeight;
-      const containerAspect = 16 / 9;
+      const containerAspect = isPortrait ? 9 / 16 : 16 / 9;
 
       let drawWidth = exportWidth;
       let drawHeight = exportHeight;
 
       if (naturalAspect > containerAspect) {
-        // Image is wider than 16:9
+        // Image is wider than container aspect
         drawHeight = exportHeight;
         drawWidth = exportHeight * naturalAspect;
       } else {
-        // Image is taller than 16:9
+        // Image is taller than container aspect
         drawWidth = exportWidth;
         drawHeight = exportWidth / naturalAspect;
       }
@@ -200,14 +203,16 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#D4B483] text-[#0F4C5C]">
-                  16:9 Strict Ratio
+                  {aspectRatio === '9:16' ? '9:16 Portrait Ratio' : '16:9 Strict Ratio'}
                 </span>
                 <h3 className="text-lg font-serif font-bold text-white">
                   Crop & Frame: {imageLabel}
                 </h3>
               </div>
               <p className="text-xs text-white/60 mt-0.5">
-                Drag to position, use slider or wheel to zoom. Cropped to standard 16:9 landscape.
+                {aspectRatio === '9:16'
+                  ? 'Drag to position, use slider or wheel to zoom. Cropped strictly to 9:16 vertical portrait.'
+                  : 'Drag to position, use slider or wheel to zoom. Cropped to standard 16:9 landscape.'}
               </p>
             </div>
             <button
@@ -220,7 +225,7 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
 
           {/* Viewport Area */}
           <div className="p-6 flex flex-col items-center justify-center bg-black/40">
-            {/* 16:9 Aspect Ratio Frame Container */}
+            {/* Aspect Ratio Frame Container */}
             <div
               ref={containerRef}
               onMouseDown={handleMouseDown}
@@ -228,7 +233,11 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
               onWheel={handleWheel}
-              className="relative w-full max-w-2xl aspect-video rounded-2xl overflow-hidden bg-neutral-900 border-2 border-[#D4B483]/80 shadow-2xl cursor-grab active:cursor-grabbing select-none"
+              className={`relative rounded-2xl overflow-hidden bg-neutral-900 border-2 border-[#D4B483]/80 shadow-2xl cursor-grab active:cursor-grabbing select-none ${
+                aspectRatio === '9:16'
+                  ? 'w-[270px] sm:w-[290px] h-[480px] sm:h-[515px]'
+                  : 'w-full max-w-2xl aspect-video'
+              }`}
               style={{ touchAction: 'none' }}
             >
               {/* Image being cropped */}
@@ -250,7 +259,7 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
                 />
               </div>
 
-              {/* 16:9 Grid Overlay (Rule of Thirds) */}
+              {/* Grid Overlay (Rule of Thirds) */}
               <div className="absolute inset-0 pointer-events-none grid grid-cols-3 grid-rows-3 border border-white/20">
                 <div className="border-r border-b border-white/15"></div>
                 <div className="border-r border-b border-white/15"></div>
@@ -258,8 +267,8 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
                 <div className="border-r border-b border-white/15"></div>
                 <div className="border-r border-b border-white/15"></div>
                 <div className="border-b border-white/15"></div>
-                <div className="border-r border-white/15"></div>
-                <div className="border-r border-white/15"></div>
+                <div className="border-r border-b border-white/15"></div>
+                <div className="border-r border-b border-white/15"></div>
                 <div></div>
               </div>
 
@@ -269,16 +278,20 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
                 <span>Drag to reposition</span>
               </div>
 
-              {/* 16:9 Badge */}
+              {/* Aspect Ratio Badge */}
               <div className="absolute bottom-3 right-3 pointer-events-none bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px] font-mono text-[#D4B483] border border-white/10">
-                16:9 (1920 × 1080)
+                {aspectRatio === '9:16' ? '9:16 (1080 × 1920)' : '16:9 (1920 × 1080)'}
               </div>
             </div>
 
             {/* Hint Notice */}
             <div className="mt-3 flex items-center gap-2 text-xs text-white/50">
               <AlertCircle size={14} className="text-[#D4B483]" />
-              <span>To ensure consistent layout across Estate.Lab, all images must be strictly 16:9 landscape.</span>
+              <span>
+                {aspectRatio === '9:16'
+                  ? 'To ensure consistent visual excellence, the portrait is strictly formatted to 9:16 vertical ratio.'
+                  : 'To ensure consistent layout across Estate.Lab, all images must be strictly 16:9 landscape.'}
+              </span>
             </div>
           </div>
 
@@ -366,7 +379,7 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
                 ) : (
                   <>
                     <Check size={16} />
-                    <span>Apply & Save 16:9</span>
+                    <span>Apply & Save {aspectRatio === '9:16' ? '9:16' : '16:9'}</span>
                   </>
                 )}
               </button>
