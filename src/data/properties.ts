@@ -1,8 +1,9 @@
 export interface PropertyType {
   id: string;
   name: string;
-  collection: 'Starter' | 'Family';
+  collection: 'Starter' | 'Family' | string;
   style: string;
+  isCurated?: boolean;
   specs: {
     area: string;
     beds: number;
@@ -42,6 +43,7 @@ export const properties: PropertyType[] = [
     name: 'Type 21',
     collection: 'Starter',
     style: 'minimalis',
+    isCurated: true,
     specs: { area: '21 m²', beds: 1, baths: 1, features: ['1 Multifunction Room'] },
     description: 'Perfect for singles or new couples looking for a compact, highly functional space.',
     images: { ...defaultImages, exterior: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800' }
@@ -51,6 +53,7 @@ export const properties: PropertyType[] = [
     name: 'Type 36',
     collection: 'Starter',
     style: 'minimalis',
+    isCurated: true,
     specs: { area: '36 m²', beds: 2, baths: 1, features: ['Mini Living Room'] },
     description: 'The most popular, budget-friendly choice for small families with smart layouts.',
     images: { 
@@ -68,6 +71,7 @@ export const properties: PropertyType[] = [
     name: 'Type 45',
     collection: 'Family',
     style: 'skandinavia',
+    isCurated: true,
     specs: { area: '45 m²', beds: 2, baths: 1, features: ['Large Living Room', 'Carport'] },
     description: 'High demand for young families and investors, offering spacious daily living areas.',
     images: { 
@@ -81,6 +85,7 @@ export const properties: PropertyType[] = [
     name: 'Type 54',
     collection: 'Family',
     style: 'tropis',
+    isCurated: true,
     specs: { area: '54 m²', beds: 3, baths: 2, features: ['Separate Family Room'] },
     description: 'Great for families with children, providing dedicated zones for privacy and gathering.',
     images: { ...defaultImages, exterior: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=800' }
@@ -90,6 +95,7 @@ export const properties: PropertyType[] = [
     name: 'Type 60',
     collection: 'Family',
     style: 'industrial',
+    isCurated: true,
     specs: { area: '60 m²', beds: 3, baths: 2, features: ['2 Floors', 'Semi-open Rear Area'] },
     description: 'Maximized vertical space with seamless indoor-outdoor integration at the rear.',
     images: { 
@@ -160,6 +166,7 @@ export const properties: PropertyType[] = [
     name: 'Type 50',
     collection: 'Family',
     style: 'minimalis',
+    isCurated: true,
     specs: { area: '50 m²', beds: 3, baths: 2, features: ['Integrated Kitchen', 'Carport'] },
     description: 'A sophisticated balance of form and function for the modern family.',
     images: { 
@@ -186,6 +193,7 @@ export const properties: PropertyType[] = [
     name: 'Type 72',
     collection: 'Family',
     style: 'tropis',
+    isCurated: true,
     specs: { area: '72 m²', beds: 3, baths: 2, features: ['Indoor Garden', 'High Ceilings'] },
     description: 'A luxurious resort-like feel blending indoor comfort with tropical nature.',
     images: { ...defaultImages, exterior: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&q=80&w=800' }
@@ -208,6 +216,7 @@ export const properties: PropertyType[] = [
     name: 'Type 85',
     collection: 'Family',
     style: 'tropis',
+    isCurated: true,
     specs: { area: '85 m²', beds: 4, baths: 3, features: ['Pool Option', 'Airflow Design'] },
     description: 'The pinnacle of family living with seamless natural integration and premium space. Designed for those who value indoor-outdoor connection, privacy, and absolute comfort.',
     keyFeatures: [

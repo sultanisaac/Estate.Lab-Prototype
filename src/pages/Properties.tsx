@@ -71,8 +71,12 @@ export function Properties() {
     // Style
     const matchesStyle = selectedStyle === 'all' || property.style === selectedStyle;
 
-    // Collection
-    const matchesCollection = selectedCollection === 'all' || property.collection?.toLowerCase() === selectedCollection.toLowerCase();
+    // Collection or Curated
+    const matchesCollection = selectedCollection === 'all' 
+      ? true 
+      : selectedCollection === 'curated'
+        ? Boolean(property.isCurated)
+        : property.collection?.toLowerCase() === selectedCollection.toLowerCase();
 
     // Beds
     const matchesBeds = minBeds === 0 || (property.specs?.beds >= minBeds);
@@ -155,13 +159,14 @@ export function Properties() {
 
                   {/* Collection Filter */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Collection</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Showcase / Collection</label>
                     <select
                       className="mt-1 block w-full pl-3 pr-10 py-3 text-base border-gray-200 bg-gray-50 focus:outline-none focus:ring-brand-secondary focus:border-brand-secondary sm:text-sm rounded-xl"
                       value={selectedCollection}
                       onChange={(e) => setSelectedCollection(e.target.value)}
                     >
-                      <option value="all">All Collections</option>
+                      <option value="all">All Properties</option>
+                      <option value="curated">★ The Curated Collections</option>
                       <option value="starter">Starter</option>
                       <option value="family">Family</option>
                     </select>

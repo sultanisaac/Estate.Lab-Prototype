@@ -6,6 +6,7 @@ import { BookingsTab } from './tabs/BookingsTab';
 import { CalendarTab } from './tabs/CalendarTab';
 import { PropertiesTab } from './tabs/PropertiesTab';
 import { NewsletterTab } from './tabs/NewsletterTab';
+import { PropertyFormPage } from './PropertyFormPage';
 
 interface AdminDashboardProps {
   onLogout: () => void;
@@ -103,6 +104,8 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
             <Route path="bookings" element={<BookingsTab />} />
             <Route path="calendar" element={<CalendarTab />} />
             <Route path="properties" element={<PropertiesTab />} />
+            <Route path="properties/new" element={<PropertyFormPage />} />
+            <Route path="properties/edit/:id" element={<PropertyFormPage />} />
             <Route path="newsletter" element={<NewsletterTab />} />
           </Routes>
         </div>
