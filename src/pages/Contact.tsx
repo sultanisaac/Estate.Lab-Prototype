@@ -1,9 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Mail, MapPin, Clock, ShieldCheck, CheckCircle2, Send, MessageCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, ShieldCheck, MessageCircle } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import { getWebsiteContent, type AboutMeData } from '../data/websiteContent';
+
+const CONSULTATION_TYPES: Record<string, string> = {
+  buying: 'Acquiring a Curated Home',
+  offmarket: 'Private Off-Market Inquiries',
+  selling: 'Listing / Selling an Estate',
+  advisory: 'General Architecture Advisory',
+};
+
+const MEETING_FORMATS: Record<string, string> = {
+  'in-person': 'Private Lounge Meeting (Sudirman)',
+  virtual: 'Virtual Video Call (Zoom / Google Meet)',
+  onsite: 'On-Site Property Viewing',
+};
 
 export function Contact() {
+  const [aboutMe, setAboutMe] = useState<AboutMeData>(() => getWebsiteContent().aboutMe);
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setAboutMe(getWebsiteContent().aboutMe);
+    };
+    window.addEventListener('website_content_updated', handleUpdate);
+    return () => window.removeEventListener('website_content_updated', handleUpdate);
+  }, []);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -16,21 +40,44 @@ export function Contact() {
 
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submittedWhatsappUrl, setSubmittedWhatsappUrl] = useState<string>('');
+
+  const advisorFirstName = (aboutMe.name || 'Sultan').trim().split(' ')[0];
+
+  const quickWhatsappUrl = `https://wa.me/6281123456789?text=${encodeURIComponent(
+    `Hello ${advisorFirstName}, I would like to schedule a private real estate consultation.`
+  )}`;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate submission / store inquiry
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
-    }, 600);
-  };
+    const interestLabel = CONSULTATION_TYPES[formData.consultationType] || formData.consultationType;
+    const formatLabel = MEETING_FORMATS[formData.meetingFormat] || formData.meetingFormat;
 
-  const whatsappUrl = `https://wa.me/6281123456789?text=${encodeURIComponent(
-    'Hello Sultan, I would like to schedule a private real estate consultation.'
-  )}`;
+    const messageLines = [
+      `*New Private Consultation Request - Estate.Lab*`,
+      ``,
+      `👤 *Full Name:* ${formData.name}`,
+      `📧 *Email:* ${formData.email}`,
+      `📱 *Phone / WhatsApp:* ${formData.phone}`,
+      `🎯 *Area of Interest:* ${interestLabel}`,
+      `🤝 *Meeting Preference:* ${formatLabel}`,
+      formData.preferredTime ? `📅 *Preferred Date/Time:* ${formData.preferredTime}` : null,
+      formData.message ? `📝 *Specific Requirements / Notes:*\n${formData.message}` : null,
+      ``,
+      `_Sent via Estate.Lab Private Advisory Portal_`
+    ].filter(Boolean);
+
+    const fullWhatsappUrl = `https://wa.me/6281123456789?text=${encodeURIComponent(messageLines.join('\n'))}`;
+    setSubmittedWhatsappUrl(fullWhatsappUrl);
+
+    // Automatically trigger WhatsApp in a new tab/window
+    window.open(fullWhatsappUrl, '_blank', 'noopener,noreferrer');
+
+    setLoading(false);
+    setSubmitted(true);
+  };
 
   return (
     <div className="pt-24 pb-20 min-h-screen bg-brand-background">
@@ -51,7 +98,7 @@ export function Contact() {
             transition={{ delay: 0.1 }}
             className="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-primary font-bold mb-6"
           >
-            Private Consultation with Sultan Isaac
+            Private Consultation with {aboutMe.name || 'Sultan Isaac'}
           </motion.h1>
 
           <motion.p
@@ -77,13 +124,13 @@ export function Contact() {
               
               <div className="flex items-center gap-4 mb-6">
                 <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200"
-                  alt="Sultan Isaac"
-                  className="w-16 h-16 rounded-2xl object-cover border-2 border-brand-secondary"
+                  src={aboutMe.portraitUrl || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200'}
+                  alt={aboutMe.name || 'Sultan Isaac'}
+                  className="w-16 h-16 rounded-2xl object-cover border-2 border-brand-secondary shrink-0 shadow-md"
                 />
-                <div>
-                  <h3 className="font-serif text-xl font-bold text-white">Sultan Isaac</h3>
-                  <p className="text-xs text-brand-secondary uppercase tracking-wider font-semibold">Private Broker</p>
+                <div className="min-w-0">
+                  <h3 className="font-serif text-xl font-bold text-white truncate">{aboutMe.name || 'Sultan Isaac'}</h3>
+                  <p className="text-xs text-brand-secondary uppercase tracking-wider font-semibold truncate">{aboutMe.roleTag || 'Private Broker'}</p>
                   <p className="text-xs text-white/70 mt-0.5">Average reply time: &lt; 15 mins</p>
                 </div>
               </div>
@@ -93,13 +140,13 @@ export function Contact() {
               </p>
 
               <a
-                href={whatsappUrl}
+                href={quickWhatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-3 w-full py-3.5 px-6 bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg text-sm"
               >
                 <MessageCircle className="w-5 h-5 fill-current" />
-                <span>Message Sultan on WhatsApp</span>
+                <span>Message {advisorFirstName} on WhatsApp</span>
               </a>
             </div>
 
@@ -171,36 +218,58 @@ export function Contact() {
                 Request a Private Consultation
               </h3>
               <p className="text-brand-text/70 text-sm mb-8">
-                Please complete the form below. Sultan Isaac will personally review your preferences and get in touch within 24 hours.
+                Please complete the form below. {aboutMe.name || 'Sultan Isaac'} will personally review your preferences and get in touch within 24 hours.
               </p>
 
               {submitted ? (
-                <div className="text-center py-12 space-y-4">
-                  <div className="w-16 h-16 bg-brand-secondary/20 text-brand-primary border border-brand-secondary/30 rounded-full flex items-center justify-center mx-auto shadow-sm">
-                    <CheckCircle2 className="w-8 h-8 text-brand-primary" />
+                <div className="text-center py-10 space-y-5">
+                  <div className="w-16 h-16 bg-[#25D366]/15 text-[#25D366] border border-[#25D366]/30 rounded-full flex items-center justify-center mx-auto shadow-sm">
+                    <MessageCircle className="w-8 h-8 fill-current" />
                   </div>
-                  <h4 className="font-serif text-2xl font-bold text-brand-primary">Consultation Request Received</h4>
-                  <p className="text-brand-text/70 max-w-md mx-auto text-sm leading-relaxed">
-                    Thank you, <strong className="text-brand-primary">{formData.name}</strong>. Sultan Isaac has received your inquiry and will reach out shortly via {formData.phone || formData.email} to confirm details.
-                  </p>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setSubmitted(false);
-                      setFormData({
-                        name: '',
-                        email: '',
-                        phone: '',
-                        consultationType: 'buying',
-                        meetingFormat: 'in-person',
-                        preferredTime: '',
-                        message: ''
-                      });
-                    }}
-                    className="mt-4 rounded-xl border-brand-primary text-brand-primary hover:bg-brand-primary/5"
-                  >
-                    Submit Another Inquiry
-                  </Button>
+                  <div>
+                    <h4 className="font-serif text-2xl font-bold text-brand-primary">Consultation Details Ready</h4>
+                    <p className="text-brand-text/70 max-w-md mx-auto text-sm leading-relaxed mt-2">
+                      Thank you, <strong className="text-brand-primary">{formData.name}</strong>. Your consultation details have been compiled and sent to WhatsApp for <strong className="text-brand-primary">{aboutMe.name || 'Sultan Isaac'}</strong>.
+                    </p>
+                  </div>
+
+                  {submittedWhatsappUrl && (
+                    <div className="pt-2">
+                      <a
+                        href={submittedWhatsappUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg text-sm"
+                      >
+                        <MessageCircle className="w-5 h-5 fill-current" />
+                        <span>Send via WhatsApp Directly</span>
+                      </a>
+                      <p className="text-xs text-brand-text/50 mt-2">
+                        Click above if WhatsApp did not open automatically in a new window.
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="pt-4 border-t border-brand-accent/40">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setSubmitted(false);
+                        setFormData({
+                          name: '',
+                          email: '',
+                          phone: '',
+                          consultationType: 'buying',
+                          meetingFormat: 'in-person',
+                          preferredTime: '',
+                          message: ''
+                        });
+                      }}
+                      className="rounded-xl border-brand-primary text-brand-primary hover:bg-brand-primary/5 text-sm"
+                    >
+                      Submit Another Inquiry
+                    </Button>
+                  </div>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -317,11 +386,11 @@ export function Contact() {
                     className="w-full rounded-xl py-3.5 flex items-center justify-center gap-2 text-base font-semibold shadow-md hover:shadow-lg"
                   >
                     {loading ? (
-                      <span>Submitting Request...</span>
+                      <span>Opening WhatsApp...</span>
                     ) : (
                       <>
-                        <span>Submit Private Consultation Request</span>
-                        <Send className="w-4 h-4" />
+                        <MessageCircle className="w-5 h-5 fill-current" />
+                        <span>Submit & Send via WhatsApp</span>
                       </>
                     )}
                   </Button>
